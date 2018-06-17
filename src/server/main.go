@@ -4,7 +4,7 @@ import (
     "flag"
     "log"
 
-    "github.com/eyedeekay/jumphelper"
+    "github.com/eyedeekay/jumphelper/src"
 )
 
 func main(){
