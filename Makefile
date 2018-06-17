@@ -13,7 +13,7 @@ docker:
 docker-run:
 	docker run -i -t -d \
 		-p 127.0.0.1:7054:7054 \
-		-n jumphelper \
+		--name jumphelper \
 		eyedeekay/jumphelper
 
 test:
