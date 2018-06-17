@@ -42,7 +42,7 @@ func (s *Server) HandleExists(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintln(w, "TRUE", p)
 		return
 	}
-	fmt.Println(w, "FALSE", p)
+	fmt.Fprintln(w, "FALSE", p)
 	return
 }
 
@@ -56,7 +56,7 @@ func (s *Server) HandleJump(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintln(w, line)
 		return
 	}
-	fmt.Println(w, "FALSE")
+	fmt.Fprintln(w, "FALSE")
 	return
 }
 
@@ -64,7 +64,6 @@ func (s *Server) HandleJump(w http.ResponseWriter, r *http.Request) {
 func (s *Server) NewMux() (*http.ServeMux, error) {
 	s.localService = http.NewServeMux()
 	s.localService.Handle("/check/", http.HandlerFunc(s.HandleExists))
-	//s.localService.Handle("/search/", http.HandlerFunc(s.HandleExists))
 	s.localService.Handle("/", http.HandlerFunc(s.HandleJump))
 	if s.err != nil {
 		return nil, fmt.Errorf("Local mux configuration error: %s", s.err)
