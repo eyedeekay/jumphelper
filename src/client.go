@@ -15,13 +15,13 @@ type Client struct {
 	connection net.Conn
 }
 
-func (c *Client) address() string {
-	return c.host + ":" + c.port
+func (c *Client) address(s string) string {
+	return c.host + ":" + c.port + "/" + s
 }
 
 // Check writes a request for a true-false answer to a jumphelper server
 func (c *Client) Check(s string) (bool, error) {
-	resp, err := http.Get(c.address() + s)
+	resp, err := http.Get(c.address(s))
 	if err != nil {
 		return false, err
 	}
@@ -38,7 +38,7 @@ func (c *Client) Check(s string) (bool, error) {
 
 // Request writes a request for a base32 answer to a jumphelper server
 func (c *Client) Request(s string) (string, error) {
-	resp, err := http.Get(c.address() + s)
+	resp, err := http.Get(c.address(s))
 	if err != nil {
 		return "", err
 	}

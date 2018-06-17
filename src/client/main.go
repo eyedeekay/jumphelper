@@ -21,7 +21,7 @@ func main() {
 
 	if *url != "false" {
 		if !*addr {
-			if b, e := s.Check("i2p-projekt.i2p"); b {
+			if b, e := s.Check(*url); b {
 				log.Println("true")
 				if e != nil {
 					log.Fatal(e)
@@ -33,7 +33,7 @@ func main() {
 				}
 			}
 		} else {
-			if s, e := s.Request("i2p-projekt.i2p"); s != "" {
+			if s, e := s.Request(*url); s != "" {
 				log.Println(s)
 				if e != nil {
 					log.Fatal(e)
