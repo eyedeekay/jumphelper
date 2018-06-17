@@ -5,11 +5,16 @@ t: gofmt golint govet
 	sudo -u i2pd make test
 	make build
 
+d: docker docker-run
+
 docker:
 	docker build -f Dockerfile -t eyedeekay/jumphelper .
 
 docker-run:
-	docker run -i -t -p 127.0.0.1:7054:7054 --name jumphelper eyedeekay/jumphelper
+	docker run -i -t -d \
+		-p 127.0.0.1:7054:7054 \
+		-n jumphelper \
+		eyedeekay/jumphelper
 
 test:
 	cd src && go test
