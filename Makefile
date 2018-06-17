@@ -32,7 +32,7 @@ build:
 	@echo 'built.'
 
 gofmt:
-	cd src && gofmt -w *.go
+	cd src && gofmt -w *.go */*.go
 
 golint:
 	cd src && golint *.go
