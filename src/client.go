@@ -36,9 +36,9 @@ func (c *Client) Request(s string) (string, error) {
 	c.connection.Write([]byte(s))
     bytes, err := ioutil.ReadAll(c.connection)
 	if err != nil {
-		return nil, err
+		return "", err
 	}
-	return string(bytes)
+	return string(bytes), nil
 }
 
 // NewClient creates a new jumphelper client
