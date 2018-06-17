@@ -33,7 +33,7 @@ func main() {
 				}
 			}
 		} else {
-			if s, e := s.Request("i2p-projekt.i2p"); b {
+			if s, e := s.Request("i2p-projekt.i2p"); s != "" {
 				log.Println(s)
 				if e != nil {
 					log.Fatal(e)
