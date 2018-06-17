@@ -11,7 +11,7 @@ func main() {
 	host := flag.String("host", "127.0.0.1", "Host address to listen on.")
 	port := flag.String("port", "7054", "Port to listen on.")
 	url := flag.String("url", "false", "URL to check.")
-	//addr := flag.Bool("url", "false", "URL to check.")
+	addr := flag.Bool("addr", false, "Show base32 URL?.")
 	flag.Parse()
 
 	s, err := jumphelper.NewClient(*host, *port)
