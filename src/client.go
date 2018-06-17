@@ -3,6 +3,7 @@ package jumphelper
 import (
 	"io/ioutil"
 	"net"
+	"net/http"
 	"strings"
 )
 
@@ -11,7 +12,7 @@ type Client struct {
 	host string
 	port string
 
-	connection    net.Conn
+	connection net.Conn
 }
 
 func (c *Client) address() string {
@@ -20,21 +21,29 @@ func (c *Client) address() string {
 
 // Check writes a request for a true-false answer to a jumphelper server
 func (c *Client) Check(s string) (bool, error) {
-	c.connection.Write([]byte(s))
-    bytes, err := ioutil.ReadAll(c.connection)
+	resp, err := http.Get(c.address() + s)
 	if err != nil {
 		return false, err
 	}
-    if strings.HasPrefix("TRUE", string(bytes)){
-        return true, nil
-    }
+	defer resp.Body.Close()
+	bytes, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return false, err
+	}
+	if strings.HasPrefix("TRUE", string(bytes)) {
+		return true, nil
+	}
 	return false, nil
 }
 
 // Request writes a request for a base32 answer to a jumphelper server
 func (c *Client) Request(s string) (string, error) {
-	c.connection.Write([]byte(s))
-    bytes, err := ioutil.ReadAll(c.connection)
+	resp, err := http.Get(c.address() + s)
+	if err != nil {
+		return "", err
+	}
+	defer resp.Body.Close()
+	bytes, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return "", err
 	}
