@@ -102,7 +102,7 @@ func NewServerFromOptions(opts ...func(*Server) error) (*Server, error) {
 			return nil, fmt.Errorf("Service configuration error: %s", err)
 		}
 	}
-    s.limiter = rate.NewLimiter(1, 1)
+	s.limiter = rate.NewLimiter(1, 1)
 	s.jumpHelper, s.err = NewJumpHelper(s.addressBookPath)
 	if s.err != nil {
 		return nil, fmt.Errorf("Jump helper load error: %s", s.err)

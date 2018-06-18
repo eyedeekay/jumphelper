@@ -3,10 +3,10 @@ package main
 import (
 	"flag"
 	"fmt"
-    "log"
+	"log"
 
 	//"github.com/eyedeekay/jumphelper/src"
-    ".."
+	".."
 )
 
 func main() {
@@ -22,7 +22,7 @@ func main() {
 	}
 
 	if *url != "false" {
-		if ! *addr {
+		if !*addr {
 			if b, e := s.Check(*url); b {
 				fmt.Println("true")
 				if e != nil {

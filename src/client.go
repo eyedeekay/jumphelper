@@ -1,7 +1,7 @@
 package jumphelper
 
 import (
-    "fmt"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"strings"
@@ -16,12 +16,12 @@ type Client struct {
 }
 
 func (c *Client) address(s string, m ...string) string {
-    if len(m) > 0 {
-        u := "http://" + c.host + ":" + c.port + "/" + m[0] + "/" + s
-        return u
-    }
-    u := "http://" + c.host + ":" + c.port + "/" + s
-    return u
+	if len(m) > 0 {
+		u := "http://" + c.host + ":" + c.port + "/" + m[0] + "/" + s
+		return u
+	}
+	u := "http://" + c.host + ":" + c.port + "/" + s
+	return u
 }
 
 // Check writes a request for a true-false answer to a jumphelper server
@@ -35,9 +35,9 @@ func (c *Client) Check(s string) (bool, error) {
 	if err != nil {
 		return false, err
 	}
-    sbytes := strings.TrimSpace(string(bytes))
+	sbytes := strings.TrimSpace(string(bytes))
 	if strings.HasPrefix(sbytes, "TRUE") {
-        fmt.Println(sbytes)
+		fmt.Println(sbytes)
 		return true, nil
 	}
 	return false, nil
@@ -60,11 +60,11 @@ func (c *Client) Request(s string) (string, error) {
 // NewClient creates a new jumphelper client
 func NewClient(Host, Port string) (*Client, error) {
 	var c Client
-    c.client = &http.Client {
-        CheckRedirect: func(req *http.Request, via []*http.Request) error {
-            return http.ErrUseLastResponse
-        },
-    }
+	c.client = &http.Client{
+		CheckRedirect: func(req *http.Request, via []*http.Request) error {
+			return http.ErrUseLastResponse
+		},
+	}
 	c.host = Host
 	c.port = Port
 	return &c, nil
