@@ -2,9 +2,11 @@ package main
 
 import (
 	"flag"
-	"log"
+	"fmt"
+    "log"
 
-	"github.com/eyedeekay/jumphelper/src"
+	//"github.com/eyedeekay/jumphelper/src"
+    ".."
 )
 
 func main() {
@@ -20,26 +22,26 @@ func main() {
 	}
 
 	if *url != "false" {
-		if *addr {
+		if ! *addr {
 			if b, e := s.Check(*url); b {
-				log.Println("true")
+				fmt.Println("true")
 				if e != nil {
 					log.Fatal(e)
 				}
 			} else {
-				log.Println("false")
+				fmt.Println("false")
 				if e != nil {
 					log.Fatal(e)
 				}
 			}
 		} else {
 			if s, e := s.Request(*url); s != "" {
-				log.Println(s)
+				fmt.Println(s)
 				if e != nil {
 					log.Fatal(e)
 				}
 			} else {
-				log.Println("false")
+				fmt.Println("false")
 				if e != nil {
 					log.Fatal(e)
 				}

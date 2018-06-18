@@ -3,9 +3,9 @@ GO_COMPILER_OPTS = -a -tags netgo -ldflags '-w -extldflags "-static"'
 
 time=".3s"
 
-t: gofmt golint govet
-	make test
-	make build
+lint: gofmt golint govet
+
+t: lint test build
 
 d: docker docker-run
 
@@ -21,12 +21,16 @@ docker-run:
 test:
 	cd src && go test
 
-build:
+build: server client
+
+server:
 	GOOS=linux GOARCH=amd64 go build \
 		$(GO_COMPILER_OPTS) \
 		-o bin/jumphelper \
 		./src/server/main.go
 	@echo 'built.'
+
+client:
 	GOOS=linux GOARCH=amd64 go build \
 		$(GO_COMPILER_OPTS) \
 		-o bin/ijh \
@@ -47,13 +51,13 @@ run:
 
 echo:
 	./bin/ijh -url="i2p-projekt.i2p"
-	sleep "$time"
+	sleep "$(time)"
 
 doecho:
 	while true; do make echo; done
 
 curl:
-	/usr/bin/curl 127.0.0.1:7054/check/i2p-projekt.i2p
+	/usr/bin/curl -l http://127.0.0.1:7054/check/i2p-projekt.i2p
 	/usr/bin/curl -l 127.0.0.1:7054/i2p-projekt.i2p
 
 deps:
