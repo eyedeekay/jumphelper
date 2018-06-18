@@ -5,6 +5,8 @@ import (
 	"log"
 	"net/http"
 	"strings"
+
+	"golang.org/x/time/rate"
 )
 
 // Server is a TCP service that responds to addressbook requests
@@ -16,11 +18,24 @@ type Server struct {
 	jumpHelper      *JumpHelper
 	localService    *http.ServeMux
 
+	limiter *rate.Limiter
+
 	err error
 }
 
 func (s *Server) address() string {
 	return s.host + ":" + s.port
+}
+
+func (s *Server) limit(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if s.limiter.Allow() == false {
+			http.Error(w, http.StatusText(429), http.StatusTooManyRequests)
+			return
+		}
+
+		next.ServeHTTP(w, r)
+	})
 }
 
 // Serve sets up a listening server on the specified port
@@ -29,7 +44,7 @@ func (s *Server) Serve() {
 	if s.err != nil {
 		log.Fatal(s.err)
 	}
-	s.err = http.ListenAndServe(s.address(), s.localService)
+	s.err = http.ListenAndServe(s.address(), s.limit(s.localService))
 	if s.err != nil {
 		log.Fatal(s.err)
 	}
@@ -87,6 +102,7 @@ func NewServerFromOptions(opts ...func(*Server) error) (*Server, error) {
 			return nil, fmt.Errorf("Service configuration error: %s", err)
 		}
 	}
+    s.limiter = rate.NewLimiter(1, 1)
 	s.jumpHelper, s.err = NewJumpHelper(s.addressBookPath)
 	if s.err != nil {
 		return nil, fmt.Errorf("Jump helper load error: %s", s.err)

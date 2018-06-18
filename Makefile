@@ -1,8 +1,10 @@
 
 GO_COMPILER_OPTS = -a -tags netgo -ldflags '-w -extldflags "-static"'
 
+time=".3s"
+
 t: gofmt golint govet
-	sudo -u i2pd make test
+	make test
 	make build
 
 d: docker docker-run
@@ -41,10 +43,14 @@ govet:
 	cd src && go vet *.go
 
 run:
-	sudo -u i2pd ./bin/jumphelper
+	./bin/jumphelper
 
 echo:
 	./bin/ijh -url="i2p-projekt.i2p"
+	sleep "$time"
+
+doecho:
+	while true; do make echo; done
 
 curl:
 	/usr/bin/curl 127.0.0.1:7054/check/i2p-projekt.i2p
@@ -52,3 +58,4 @@ curl:
 
 deps:
 	go get -u github.com/eyedeekay/jumphelper/src
+	go get -u golang.org/x/time/rate

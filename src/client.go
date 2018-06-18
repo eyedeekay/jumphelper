@@ -16,12 +16,12 @@ type Client struct {
 }
 
 func (c *Client) address(s string) string {
-	return c.host + ":" + c.port + "/" + s
+	return "http://" + c.host + ":" + c.port + "/" + s
 }
 
 // Check writes a request for a true-false answer to a jumphelper server
 func (c *Client) Check(s string) (bool, error) {
-	resp, err := http.Get("http://" + c.address(s))
+	resp, err := http.Get(c.address(s))
 	if err != nil {
 		return false, err
 	}

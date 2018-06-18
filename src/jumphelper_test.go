@@ -6,7 +6,7 @@ import (
 )
 
 func TestJumpHelperLocal(t *testing.T) {
-	jh, err := NewJumpHelper("/var/lib/i2pd/addressbook/addresses.csv")
+	jh, err := NewJumpHelper("../addresses.csv")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -15,7 +15,7 @@ func TestJumpHelperLocal(t *testing.T) {
 }
 
 func TestJumpHelperLocalBool(t *testing.T) {
-	jh, err := NewJumpHelper("/var/lib/i2pd/addressbook/addresses.csv")
+	jh, err := NewJumpHelper("../addresses.csv")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -24,7 +24,7 @@ func TestJumpHelperLocalBool(t *testing.T) {
 }
 
 func TestJumpHelperLocalA(t *testing.T) {
-	jh, err := NewJumpHelper("/var/lib/i2pd/addressbook/addresses.csv")
+	jh, err := NewJumpHelper("../addresses.csv")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -33,7 +33,7 @@ func TestJumpHelperLocalA(t *testing.T) {
 }
 
 func TestJumpHelperLocalBoolA(t *testing.T) {
-	jh, err := NewJumpHelper("/var/lib/i2pd/addressbook/addresses.csv")
+	jh, err := NewJumpHelper("../addresses.csv")
 	if err != nil {
 		log.Fatal(err)
 	}
