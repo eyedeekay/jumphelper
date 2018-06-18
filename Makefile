@@ -57,7 +57,7 @@ doecho:
 	while true; do make echo; done
 
 curl:
-	/usr/bin/curl -l http://127.0.0.1:7054/check/i2p-projekt.i2p
+	/usr/bin/curl -l 127.0.0.1:7054/check/i2p-projekt.i2p
 	/usr/bin/curl -l 127.0.0.1:7054/i2p-projekt.i2p
 
 deps:
