@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func ServiceStart() Client {
+func ServiceStart() *Client {
     log.Printf("testing service start")
     c, err := NewClient("127.0.0.1", "7054")
 	if err != nil {
@@ -14,8 +14,8 @@ func ServiceStart() Client {
     return c
 }
 
-func ServiceCheck(c Client) {
-    log.Printf("testing Client Lookup")
+func ServiceCheck(c *Client) {
+    log.Printf("testing *Client Lookup")
     if b, e := c.Check("i2p-projekt.i2p"); b {
         log.Println("Found i2p-projekt.i2p in addressbook")
     }else{
@@ -23,8 +23,8 @@ func ServiceCheck(c Client) {
     }
 }
 
-func ServiceHarderCheck(c Client) {
-    log.Printf("testing Client Lookup")
+func ServiceHarderCheck(c *Client) {
+    log.Printf("testing *Client Lookup")
     if b, e := c.Check("i2p-projekt.i2p/en"); b {
         log.Println("Found i2p-projekt.i2p in addressbook")
     }else{
