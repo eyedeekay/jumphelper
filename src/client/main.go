@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"log"
 
-	//"github.com/eyedeekay/jumphelper/src"
-	".."
+	"github.com/eyedeekay/jumphelper/src"
+	//".."
 )
 
 func main() {

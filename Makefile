@@ -50,7 +50,7 @@ run:
 	./bin/jumphelper
 
 echo:
-	./bin/ijh -url="i2p-projekt.i2p/en/"
+	./bin/ijh -url="http://i2p-projekt.i2p/en/" -addr=true
 	sleep "$(time)"
 
 doecho:

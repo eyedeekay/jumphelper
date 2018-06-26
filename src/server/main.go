@@ -4,8 +4,8 @@ import (
 	"flag"
 	"log"
 
-	//"github.com/eyedeekay/jumphelper/src"
-	".."
+	"github.com/eyedeekay/jumphelper/src"
+	//".."
 )
 
 func main() {

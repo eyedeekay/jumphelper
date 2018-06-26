@@ -69,8 +69,8 @@ func (s *Server) HandleJump(w http.ResponseWriter, r *http.Request) {
 	p := strings.TrimPrefix(r.URL.Path, "/")
 	if s.jumpHelper.CheckAddressBook(p) {
 		line := "http://" + s.jumpHelper.SearchAddressBook(p)[1] + ".b32.i2p"
-		w.Header().Set("Location", line)
-		w.WriteHeader(301)
+		//w.Header().Set("Location", line)
+		//w.WriteHeader(301)
 		fmt.Fprintln(w, line)
 		return
 	}
