@@ -58,7 +58,7 @@ func (c *Client) Request(s string) (string, error) {
 }
 
 // NewClient creates a new jumphelper client
-func NewClient(Host, Port string) (*Client, error) {
+func NewClient(Host, Port string) (Client, error) {
 	var c Client
 	c.client = &http.Client{
 		CheckRedirect: func(req *http.Request, via []*http.Request) error {
@@ -67,5 +67,5 @@ func NewClient(Host, Port string) (*Client, error) {
 	}
 	c.host = Host
 	c.port = Port
-	return &c, nil
+	return c, nil
 }
