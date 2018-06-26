@@ -71,7 +71,7 @@ func (s *Server) HandleJump(w http.ResponseWriter, r *http.Request) {
 		line := "http://" + s.jumpHelper.SearchAddressBook(p)[1] + ".b32.i2p"
 		//w.Header().Set("Location", line)
 		//w.WriteHeader(301)
-		fmt.Fprintln(w, line)
+		fmt.Fprintln(w, "TRUE", line)
 		return
 	}
 	fmt.Fprintln(w, "FALSE")
@@ -89,6 +89,7 @@ func (s *Server) NewMux() (*http.ServeMux, error) {
 	return s.localService, nil
 }
 
+// Rate returns the rate
 func (s *Server) Rate() rate.Limit {
 	r := time.Duration(s.rate) * time.Second
 	return rate.Every(r)
@@ -120,6 +121,7 @@ func NewServerFromOptions(opts ...func(*Server) error) (*Server, error) {
 	return &s, s.err
 }
 
+// Service quickly generates a service with the defaults.
 func Service() {
 	log.Println("Starting server:")
 	host := "0.0.0.0"

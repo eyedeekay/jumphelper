@@ -12,11 +12,17 @@ d: docker docker-run
 docker:
 	docker build -f Dockerfile -t eyedeekay/jumphelper .
 
-docker-run:
+docker-run: docker-clean
 	docker run -i -t -d \
 		-p 127.0.0.1:7054:7054 \
 		--name jumphelper \
 		eyedeekay/jumphelper
+
+docker-clean:
+	docker rm -f jumphelper; true
+
+clean:
+	rm -f bin/*
 
 test:
 	cd src && go test
@@ -50,7 +56,7 @@ run:
 	./bin/jumphelper
 
 echo:
-	./bin/ijh -url="http://i2p-projekt.i2p/en/" -addr=true
+	./bin/ijh -url="http://i2p-projekt.i2p/" -addr=true
 	sleep "$(time)"
 
 doecho:
