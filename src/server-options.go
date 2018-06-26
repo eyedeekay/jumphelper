@@ -49,3 +49,19 @@ func SetServerPort(s interface{}) func(*Server) error {
 		}
 	}
 }
+
+//SetServerRate sets the host of the Server client's SAM bridge
+func SetServerRate(s int) func(*Server) error {
+	return func(c *Server) error {
+		c.rate = s
+		return nil
+	}
+}
+
+//SetServerBurst sets the host of the Server client's SAM bridge
+func SetServerBurst(s int) func(*Server) error {
+	return func(c *Server) error {
+		c.burst = s
+		return nil
+	}
+}
