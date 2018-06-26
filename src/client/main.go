@@ -5,7 +5,8 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/eyedeekay/jumphelper/src"
+	//"github.com/eyedeekay/jumphelper/src"
+    ".."
 )
 
 func main() {
@@ -15,14 +16,14 @@ func main() {
 	addr := flag.Bool("addr", false, "Show base32 URL?.")
 	flag.Parse()
 
-	s, err := jumphelper.NewClient(*host, *port)
+	c, err := jumphelper.NewClient(*host, *port)
 	if err != nil {
 		log.Fatal(err, "Error starting client")
 	}
 
 	if *url != "false" {
 		if !*addr {
-			if b, e := s.Check(*url); b {
+			if b, e := c.Check(*url); b {
 				fmt.Println("true")
 				if e != nil {
 					log.Fatal(e)
@@ -34,7 +35,7 @@ func main() {
 				}
 			}
 		} else {
-			if s, e := s.Request(*url); s != "" {
+			if s, e := c.Request(*url); s != "" {
 				fmt.Println(s)
 				if e != nil {
 					log.Fatal(e)
