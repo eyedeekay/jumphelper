@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"golang.org/x/time/rate"
-    "time"
+	"time"
 )
 
 // Server is a TCP service that responds to addressbook requests
@@ -20,8 +20,8 @@ type Server struct {
 	localService    *http.ServeMux
 
 	limiter *rate.Limiter
-    rate int
-    burst int
+	rate    int
+	burst   int
 
 	err error
 }
@@ -89,9 +89,9 @@ func (s *Server) NewMux() (*http.ServeMux, error) {
 	return s.localService, nil
 }
 
-func (s *Server) Rate() rate.Limit{
-    r := time.Duration(s.rate) * time.Second
-    return rate.Every(r)
+func (s *Server) Rate() rate.Limit {
+	r := time.Duration(s.rate) * time.Second
+	return rate.Every(r)
 }
 
 // NewServer creates a new Server that answers jump-related queries
@@ -105,8 +105,8 @@ func NewServerFromOptions(opts ...func(*Server) error) (*Server, error) {
 	s.host = "127.0.0.1"
 	s.port = "7054"
 	s.addressBookPath = "/var/lib/i2pd/addressbook/addresses.csv"
-    s.rate = 1
-    s.burst = 1
+	s.rate = 1
+	s.burst = 1
 	for _, o := range opts {
 		if err := o(&s); err != nil {
 			return nil, fmt.Errorf("Service configuration error: %s", err)
@@ -121,13 +121,13 @@ func NewServerFromOptions(opts ...func(*Server) error) (*Server, error) {
 }
 
 func Service() {
-    log.Println("Starting server:")
+	log.Println("Starting server:")
 	host := "0.0.0.0"
 	port := "7054"
 	book := "../addresses.csv"
 	s, err := NewServerFromOptions(SetServerHost(host), SetServerPort(port), SetServerAddressBookPath(book), SetServerRate(0), SetServerBurst(1))
-    if err != nil {
+	if err != nil {
 		log.Fatal(err, "Error starting server")
 	}
-    go s.Serve()
+	go s.Serve()
 }

@@ -3,7 +3,7 @@ package jumphelper
 import (
 	"fmt"
 	"io/ioutil"
-    "net/url"
+	"net/url"
 	"strings"
 )
 
@@ -35,9 +35,9 @@ func (j *JumpHelper) trim(k string) string {
 // SearchAddressBook finds a (name, b32) pair in the addressbook, or returns nil of one is not found
 func (j *JumpHelper) SearchAddressBook(pk string) []string {
 	k, e := url.Parse(pk)
-    if e != nil {
-        return nil
-    }
+	if e != nil {
+		return nil
+	}
 	for _, a := range j.addressBook {
 		r := strings.SplitN(a, ",", -1)
 		if r[0] == j.trim(k.Host) {
@@ -50,9 +50,9 @@ func (j *JumpHelper) SearchAddressBook(pk string) []string {
 // CheckAddressBook returns true if an address is present, false if not
 func (j *JumpHelper) CheckAddressBook(pk string) bool {
 	k, e := url.Parse(pk)
-    if e != nil {
-        return false
-    }
+	if e != nil {
+		return false
+	}
 	for _, a := range j.addressBook {
 		r := strings.SplitN(a, ",", -1)[0]
 		if r == j.trim(k.Host) {
