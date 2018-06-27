@@ -129,11 +129,15 @@ func NewJumpHelperFromOptions(opts ...func(*JumpHelper) error) (*JumpHelper, err
 	}
 	if j.ext {
 		j.samBridgeConn, err = goSam.NewClient(j.samHost + ":" + j.samPort)
+		j.tr = &http.Transport{
+			Dial: j.samBridgeConn.Dial,
+		}
+		j.client = &http.Client{Transport: j.tr}
+		err := j.SyncRemoteAddressBooks()
+		if err != nil {
+			return nil, err
+		}
 	}
-	j.tr = &http.Transport{
-		Dial: j.samBridgeConn.Dial,
-	}
-	j.client = &http.Client{Transport: j.tr}
 	return &j, err
 }
 
