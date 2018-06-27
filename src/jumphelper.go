@@ -117,7 +117,7 @@ func NewJumpHelperFromOptions(opts ...func(*JumpHelper) error) (*JumpHelper, err
 	j.addressBookPath = "/var/lib/i2pd/addressbook/addresses.csv"
 	j.samHost = "127.0.0.1"
 	j.samPort = "7056"
-	j.ext = false
+	j.ext = true
 	for _, o := range opts {
 		if err := o(&j); err != nil {
 			return nil, fmt.Errorf("Service configuration error: %s", err)
