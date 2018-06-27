@@ -192,7 +192,7 @@ func service() {
 		SetServerBurst(1),
 		SetServerUseHelper(false),
 		SetServerJumpHelperHost("127.0.0.1"),
-		SetServerJumpHelperPort("7056"),
+		SetServerJumpHelperPort("7656"),
 	)
 	if err != nil {
 		log.Fatal(err, "Error starting server")

@@ -55,7 +55,7 @@ func (j *JumpHelper) SyncRemoteAddressBooks() error {
 		kv := strings.Split(l, "=")
 		if len(kv) == 2 {
 			i := i2pconv.I2pconv{}
-			s, e := i.I2p64to32(kv[1])
+			s, e := strings.Replace(i.I2p64to32(kv[1]), ".b32.i2p")
 			if e != nil {
 				return e
 			}
