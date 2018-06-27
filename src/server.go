@@ -12,8 +12,10 @@ import (
 
 // Server is a TCP service that responds to addressbook requests
 type Server struct {
-	host string
-	port string
+	host    string
+	port    string
+	samHost string
+	samPort string
 
 	addressBookPath string
 	jumpHelper      *JumpHelper
@@ -127,8 +129,19 @@ func Service() {
 	log.Println("Starting server:")
 	host := "127.0.0.1"
 	port := "7054"
+	samHost := "127.0.0.1"
+	samPort := "7056"
 	book := "../addresses.csv"
-	s, err := NewServerFromOptions(SetServerHost(host), SetServerPort(port), SetServerAddressBookPath(book), SetServerRate(0), SetServerBurst(1))
+	s, err := NewServerFromOptions(
+		SetServerHost(host),
+		SetServerPort(port),
+		SetServerAddressBookPath(book),
+		SetServerRate(0),
+		SetServerBurst(1),
+		SetServerJumpHelperHost(samHost),
+		SetServerJumpHelperPort(samPort),
+		SetServerUseHelper(true),
+	)
 	if err != nil {
 		log.Fatal(err, "Error starting server")
 	}
@@ -136,9 +149,18 @@ func Service() {
 }
 
 // NewService quickly generates a service with host, port, book strings
-func NewService(host, port, book string) {
+func NewService(host, port, book, samhost, samport string) {
 	log.Println("Starting server:")
-	s, err := NewServerFromOptions(SetServerHost(host), SetServerPort(port), SetServerAddressBookPath(book), SetServerRate(0), SetServerBurst(1), SetServerUseHelper(true))
+	s, err := NewServerFromOptions(
+		SetServerHost(host),
+		SetServerPort(port),
+		SetServerAddressBookPath(book),
+		SetServerRate(0),
+		SetServerBurst(1),
+		SetServerJumpHelperHost(samhost),
+		SetServerJumpHelperPort(samport),
+		SetServerUseHelper(true),
+	)
 	if err != nil {
 		log.Fatal(err, "Error starting server")
 	}

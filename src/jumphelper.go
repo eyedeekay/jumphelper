@@ -3,6 +3,7 @@ package jumphelper
 import (
 	"fmt"
 	"io/ioutil"
+	"net/http"
 	"net/url"
 	"strings"
 
@@ -18,6 +19,9 @@ type JumpHelper struct {
 
 	samBridgeConn *goSam.Client
 	ext           bool
+
+	tr     *http.Transport
+	client *http.Client
 
 	addressBook       []string
 	remoteAddressBook []string
@@ -35,6 +39,7 @@ func (j *JumpHelper) LoadAddressBook() error {
 
 // SyncRemoteAddressBooks syncs addressbooks from subscription services to the standalone addressbook
 func (j *JumpHelper) SyncRemoteAddressBooks() error {
+	//
 	return nil
 }
 
@@ -109,6 +114,10 @@ func NewJumpHelperFromOptions(opts ...func(*JumpHelper) error) (*JumpHelper, err
 	if j.ext {
 		j.samBridgeConn, err = goSam.NewClient(j.samHost + ":" + j.samPort)
 	}
+	j.tr = &http.Transport{
+		Dial: j.samBridgeConn.Dial,
+	}
+	j.client = &http.Client{Transport: j.tr}
 	return &j, err
 }
 
