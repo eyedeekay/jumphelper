@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/eyedeekay/gosam"
+    "github.com/eyedeekay/i2pasta/convert"
 )
 
 // JumpHelper is a struct that prioritizes i2p address sources
@@ -51,7 +52,16 @@ func (j *JumpHelper) SyncRemoteAddressBooks() error {
 	}
 	lines := strings.Split(string(b), "\n")
 	for _, l := range lines {
-		j.remoteAddressBook = append(j.remoteAddressBook, l)
+        kv := strings.Split(l, "=")
+        if len(kv) == 2 {
+            i := i2pconv.I2pconv{}
+            s, e := i.I2p64to32(kv[1])
+            if e != nil{
+                return e
+            }
+            fmt.Println(s)
+            j.remoteAddressBook = append(j.remoteAddressBook, kv[0] + "," + s)
+        }
 	}
 	return nil
 }
