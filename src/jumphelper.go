@@ -104,7 +104,11 @@ func (j *JumpHelper) CheckAddressBook(pk string) bool {
 
 // NewJumpHelper creates a new JumpHelper object
 func NewJumpHelper(addressBookPath, host, port string) (*JumpHelper, error) {
-	return NewJumpHelperFromOptions(SetJumpHelperAddressBookPath(addressBookPath))
+	return NewJumpHelperFromOptions(
+		SetJumpHelperAddressBookPath(addressBookPath),
+		SetJumpHelperHost(host),
+		SetJumpHelperPort(port),
+	)
 }
 
 // NewJumpHelperFromOptions creates a new JumpHelper object
