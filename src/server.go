@@ -18,6 +18,7 @@ type Server struct {
 	addressBookPath string
 	jumpHelper      *JumpHelper
 	localService    *http.ServeMux
+	ext             bool
 
 	limiter *rate.Limiter
 	rate    int
@@ -114,7 +115,7 @@ func NewServerFromOptions(opts ...func(*Server) error) (*Server, error) {
 		}
 	}
 	s.limiter = rate.NewLimiter(s.Rate(), s.burst)
-	s.jumpHelper, s.err = NewJumpHelper(s.addressBookPath, "127.0.0.1", "7054")
+	s.jumpHelper, s.err = NewJumpHelper(s.addressBookPath, s.host, s.port)
 	if s.err != nil {
 		return nil, fmt.Errorf("Jump helper load error: %s", s.err)
 	}
@@ -137,7 +138,7 @@ func Service() {
 // NewService quickly generates a service with host, port, book strings
 func NewService(host, port, book string) {
 	log.Println("Starting server:")
-	s, err := NewServerFromOptions(SetServerHost(host), SetServerPort(port), SetServerAddressBookPath(book), SetServerRate(0), SetServerBurst(1))
+	s, err := NewServerFromOptions(SetServerHost(host), SetServerPort(port), SetServerAddressBookPath(book), SetServerRate(0), SetServerBurst(1), SetServerUseHelper(true))
 	if err != nil {
 		log.Fatal(err, "Error starting server")
 	}

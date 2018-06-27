@@ -65,3 +65,11 @@ func SetServerBurst(s int) func(*Server) error {
 		return nil
 	}
 }
+
+//SetServerUseHelper sets the host of the Server client's SAM bridge
+func SetServerUseHelper(s bool) func(*Server) error {
+	return func(c *Server) error {
+		c.ext = s
+		return nil
+	}
+}
