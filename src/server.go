@@ -99,8 +99,15 @@ func (s *Server) Rate() rate.Limit {
 }
 
 // NewServer creates a new Server that answers jump-related queries
-func NewServer(Host, Port, addressBookPath string) (*Server, error) {
-	return NewServerFromOptions(SetServerHost(Host), SetServerPort(Port), SetServerAddressBookPath(addressBookPath))
+func NewServer(host, port, book, samhost, samport string) (*Server, error) {
+	log.Println("Starting server:")
+	return NewServerFromOptions(
+		SetServerHost(host),
+		SetServerPort(port),
+		SetServerAddressBookPath(book),
+		SetServerJumpHelperHost(samhost),
+		SetServerJumpHelperPort(samport),
+	)
 }
 
 // NewServerFromOptions creates a new Server that answers jump-related queries
@@ -184,7 +191,7 @@ func service() {
 		SetServerRate(0),
 		SetServerBurst(1),
 		SetServerUseHelper(false),
-        SetServerJumpHelperHost("127.0.0.1"),
+		SetServerJumpHelperHost("127.0.0.1"),
 		SetServerJumpHelperPort("7056"),
 	)
 	if err != nil {

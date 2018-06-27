@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"github.com/eyedeekay/gosam"
-    "github.com/eyedeekay/i2pasta/convert"
+	"github.com/eyedeekay/i2pasta/convert"
 )
 
 // JumpHelper is a struct that prioritizes i2p address sources
@@ -40,7 +40,7 @@ func (j *JumpHelper) LoadAddressBook() error {
 
 // SyncRemoteAddressBooks syncs addressbooks from subscription services to the standalone addressbook
 func (j *JumpHelper) SyncRemoteAddressBooks() error {
-    fmt.Println("Syncing Subscription Contents")
+	fmt.Println("Syncing Subscription Contents")
 	resp, err := j.client.Get("http://joajgazyztfssty4w2on5oaqksz6tqoxbduy553y34mf4byv6gpq.b32.i2p/export/alive-hosts.txt")
 	if err != nil {
 		return err
@@ -52,16 +52,16 @@ func (j *JumpHelper) SyncRemoteAddressBooks() error {
 	}
 	lines := strings.Split(string(b), "\n")
 	for _, l := range lines {
-        kv := strings.Split(l, "=")
-        if len(kv) == 2 {
-            i := i2pconv.I2pconv{}
-            s, e := i.I2p64to32(kv[1])
-            if e != nil{
-                return e
-            }
-            fmt.Println(s)
-            j.remoteAddressBook = append(j.remoteAddressBook, kv[0] + "," + s)
-        }
+		kv := strings.Split(l, "=")
+		if len(kv) == 2 {
+			i := i2pconv.I2pconv{}
+			s, e := i.I2p64to32(kv[1])
+			if e != nil {
+				return e
+			}
+			fmt.Println(s)
+			j.remoteAddressBook = append(j.remoteAddressBook, kv[0]+","+s)
+		}
 	}
 	return nil
 }
@@ -149,9 +149,9 @@ func NewJumpHelperFromOptions(opts ...func(*JumpHelper) error) (*JumpHelper, err
 	}
 	if j.ext {
 		j.samBridgeConn, err = goSam.NewClientFromOptions(
-            goSam.SetHost(j.samHost),
-            goSam.SetPort(j.samPort),
-        )
+			goSam.SetHost(j.samHost),
+			goSam.SetPort(j.samPort),
+		)
 		if err != nil {
 			return nil, err
 		}
