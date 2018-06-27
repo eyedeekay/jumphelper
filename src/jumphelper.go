@@ -39,7 +39,19 @@ func (j *JumpHelper) LoadAddressBook() error {
 
 // SyncRemoteAddressBooks syncs addressbooks from subscription services to the standalone addressbook
 func (j *JumpHelper) SyncRemoteAddressBooks() error {
-	//
+	resp, err := j.client.Get("http://joajgazyztfssty4w2on5oaqksz6tqoxbduy553y34mf4byv6gpq.b32.i2p/export/alive-hosts.txt")
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+	b, e := ioutil.ReadAll(resp.Body)
+	if e != nil {
+		return e
+	}
+	lines := strings.Split(string(b), "\n")
+	for _, l := range lines {
+		j.remoteAddressBook = append(j.remoteAddressBook, l)
+	}
 	return nil
 }
 
