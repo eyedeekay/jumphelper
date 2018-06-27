@@ -29,7 +29,7 @@ func SetJumpHelperPort(s string) func(*JumpHelper) error {
 	return func(c *JumpHelper) error {
 		port, err := strconv.Atoi(s)
 		if err != nil {
-			return fmt.Errorf(err.Error(), "Invalid port; non-number")
+			return fmt.Errorf("Invalid port; non-number: %s", s)
 		}
 		if port < 65536 && port > -1 {
 			c.samPort = s

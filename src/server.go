@@ -108,8 +108,8 @@ func NewServerFromOptions(opts ...func(*Server) error) (*Server, error) {
 	var s Server
 	s.host = "127.0.0.1"
 	s.port = "7054"
-	s.host = "127.0.0.1"
-	s.port = "7056"
+	s.samHost = "127.0.0.1"
+	s.samPort = "7056"
 	s.addressBookPath = "/var/lib/i2pd/addressbook/addresses.csv"
 	s.rate = 1
 	s.burst = 1

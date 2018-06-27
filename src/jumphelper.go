@@ -138,7 +138,10 @@ func NewJumpHelperFromOptions(opts ...func(*JumpHelper) error) (*JumpHelper, err
 		return nil, err
 	}
 	if j.ext {
-		j.samBridgeConn, err = goSam.NewClientFromOptions(goSam.SetHost(j.samHost), goSam.SetPort(j.samPort))
+		j.samBridgeConn, err = goSam.NewClientFromOptions(
+            goSam.SetHost(j.samHost),
+            goSam.SetPort(j.samPort),
+        )
 		if err != nil {
 			return nil, err
 		}
