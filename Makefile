@@ -57,8 +57,11 @@ run:
 	./bin/jumphelper
 
 echo:
-	./bin/ijh -url="i2p-projekt.i2p/" -port="7055" -addr=true
+	./bin/ijh -url="i2p-projekt.i2p/" -port="7054" -addr=true
 	sleep "$(time)"
+
+forum:
+	./bin/ijh -url="i2pforum.i2p/" -port="7054" -addr=true
 
 doecho:
 	while true; do make echo; done

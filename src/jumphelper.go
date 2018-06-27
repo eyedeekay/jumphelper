@@ -98,6 +98,7 @@ func (j *JumpHelper) SearchAddressBook(pk string) []string {
 		r := strings.SplitN(a, ",", 2)
 		if len(r) == 2 {
 			if r[0] == j.trim(k.Host) {
+                printKvs(r)
 				return r
 			}
 		}
