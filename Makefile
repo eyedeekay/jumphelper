@@ -14,7 +14,7 @@ docker:
 
 docker-run: docker-clean
 	docker run -i -t -d \
-		-p 127.0.0.1:7054:7054 \
+		-p 127.0.0.1:7055:7054 \
 		--name jumphelper \
 		eyedeekay/jumphelper
 
@@ -56,7 +56,7 @@ run:
 	./bin/jumphelper
 
 echo:
-	./bin/ijh -url="http://i2p-projekt.i2p/" -addr=true
+	./bin/ijh -url="i2p-projekt.i2p/" -port="7055" -addr=true
 	sleep "$(time)"
 
 doecho:
@@ -69,3 +69,6 @@ curl:
 deps:
 	go get -u github.com/eyedeekay/jumphelper/src
 	go get -u golang.org/x/time/rate
+
+follow:
+	docker logs -f jumphelper

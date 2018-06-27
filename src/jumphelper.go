@@ -34,14 +34,22 @@ func (j *JumpHelper) trim(k string) string {
 
 // SearchAddressBook finds a (name, b32) pair in the addressbook, or returns nil of one is not found
 func (j *JumpHelper) SearchAddressBook(pk string) []string {
-	k, e := url.Parse(pk)
+    var kv string
+    if !strings.HasPrefix(pk, "http://" ){
+        kv = "http://" + pk
+    }else{
+        kv = pk
+    }
+	k, e := url.Parse(kv)
 	if e != nil {
 		return nil
 	}
 	for _, a := range j.addressBook {
-		r := strings.SplitN(a, ",", -1)
-		if r[0] == j.trim(k.Host) {
-			return r
+		r := strings.SplitN(a, ",", 2)
+		if len(r) == 2 {
+			if r[0] == j.trim(k.Host) {
+				return r
+			}
 		}
 	}
 	return nil
@@ -68,4 +76,10 @@ func NewJumpHelper(addressBookPath string) (*JumpHelper, error) {
 	j.addressBookPath = addressBookPath
 	err := j.LoadAddressBook()
 	return &j, err
+}
+
+func printKvs(kv []string) {
+	for i, s := range kv {
+		fmt.Println("Key-value Pair", i, s)
+	}
 }

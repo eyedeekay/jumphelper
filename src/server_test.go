@@ -34,7 +34,7 @@ func ServiceHarderCheck(c *Client) {
 
 func ServiceRequest(c *Client) {
 	log.Printf("testing *Client Request")
-	if b, e := c.Request("http://i2p-projekt.i2p"); e == nil {
+	if b, e := c.Request("i2p-projekt.i2p"); e == nil {
 		log.Println("Found", b, "in addressbook")
 	} else {
 		log.Fatal(e)
@@ -43,7 +43,7 @@ func ServiceRequest(c *Client) {
 
 func ServiceHarderRequest(c *Client) {
 	log.Printf("testing *Client Request")
-	if b, e := c.Request("http://i2p-projekt.i2p/en"); e == nil {
+	if b, e := c.Request("i2p-projekt.i2p/en"); e == nil {
 		log.Println("Found", b, "in addressbook")
 	} else {
 		log.Fatal(e)

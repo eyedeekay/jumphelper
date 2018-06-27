@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/eyedeekay/jumphelper/src"
-	//".."
+	//"github.com/eyedeekay/jumphelper/src"
+    ".."
 )
 
 func main() {
@@ -36,7 +36,7 @@ func main() {
 			}
 		} else {
 			if s, e := c.Request(*url); s != "" {
-				fmt.Println(s)
+				fmt.Println("true", s)
 				if e != nil {
 					log.Fatal(e)
 				}

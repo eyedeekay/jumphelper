@@ -7,6 +7,8 @@ import (
 	"strings"
 )
 
+import "log"
+
 // Client is a HTTP client that makes jumphelper requests
 type Client struct {
 	host string
@@ -45,12 +47,13 @@ func (c *Client) Check(s string) (bool, error) {
 
 // Request writes a request for a base32 answer to a jumphelper server
 func (c *Client) Request(s string) (string, error) {
-	resp, err := c.client.Get(c.address(s))
+	resp, err := c.client.Get(c.address(s, "request"))
 	if err != nil {
 		return "", err
 	}
 	defer resp.Body.Close()
 	bytes, err := ioutil.ReadAll(resp.Body)
+	log.Println(resp.Header.Get("Location"))
 	if err != nil {
 		return "", err
 	}
