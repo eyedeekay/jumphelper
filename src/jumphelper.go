@@ -97,9 +97,10 @@ func (j *JumpHelper) SearchAddressBook(pk string) []string {
 	}
 	for _, a := range j.remoteAddressBook {
 		r := strings.SplitN(a, ",", 2)
+        printKvs(r)
 		if len(r) == 2 {
+
 			if r[0] == j.trim(k.Host) {
-                printKvs(r)
 				return r
 			}
 		}
