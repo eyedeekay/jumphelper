@@ -6,7 +6,7 @@ import (
 )
 
 func TestJumpHelperLocal(t *testing.T) {
-	jh, err := NewJumpHelper("../addresses.csv", "127.0.0.1", "7054")
+	jh, err := NewJumpHelper("../addresses.csv", "127.0.0.1", "7054", false)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -16,7 +16,7 @@ func TestJumpHelperLocal(t *testing.T) {
 }
 
 func TestJumpHelperLocalBool(t *testing.T) {
-	jh, err := NewJumpHelper("../addresses.csv", "127.0.0.1", "7054")
+	jh, err := NewJumpHelper("../addresses.csv", "127.0.0.1", "7054", false)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -25,7 +25,7 @@ func TestJumpHelperLocalBool(t *testing.T) {
 }
 
 func TestJumpHelperLocalA(t *testing.T) {
-	jh, err := NewJumpHelper("../addresses.csv", "127.0.0.1", "7054")
+	jh, err := NewJumpHelper("../addresses.csv", "127.0.0.1", "7054", false)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -34,7 +34,7 @@ func TestJumpHelperLocalA(t *testing.T) {
 }
 
 func TestJumpHelperLocalBoolA(t *testing.T) {
-	jh, err := NewJumpHelper("../addresses.csv", "127.0.0.1", "7054")
+	jh, err := NewJumpHelper("../addresses.csv", "127.0.0.1", "7054", false)
 	if err != nil {
 		log.Fatal(err)
 	}

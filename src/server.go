@@ -108,17 +108,24 @@ func NewServerFromOptions(opts ...func(*Server) error) (*Server, error) {
 	var s Server
 	s.host = "127.0.0.1"
 	s.port = "7054"
+	s.host = "127.0.0.1"
+	s.port = "7056"
 	s.addressBookPath = "/var/lib/i2pd/addressbook/addresses.csv"
 	s.rate = 1
 	s.burst = 1
-	s.ext = true
+	s.ext = false
 	for _, o := range opts {
 		if err := o(&s); err != nil {
 			return nil, fmt.Errorf("Service configuration error: %s", err)
 		}
 	}
 	s.limiter = rate.NewLimiter(s.Rate(), s.burst)
-	s.jumpHelper, s.err = NewJumpHelper(s.addressBookPath, s.host, s.port)
+	s.jumpHelper, s.err = NewJumpHelperFromOptions(
+		SetJumpHelperAddressBookPath(s.addressBookPath),
+		SetJumpHelperHost(s.samHost),
+		SetJumpHelperPort(s.samPort),
+		SetJumpHelperUseHelper(s.ext),
+	)
 	if s.err != nil {
 		return nil, fmt.Errorf("Jump helper load error: %s", s.err)
 	}
@@ -177,6 +184,8 @@ func service() {
 		SetServerRate(0),
 		SetServerBurst(1),
 		SetServerUseHelper(false),
+        SetServerJumpHelperHost("127.0.0.1"),
+		SetServerJumpHelperPort("7054"),
 	)
 	if err != nil {
 		log.Fatal(err, "Error starting server")

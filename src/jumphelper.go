@@ -7,7 +7,7 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/cryptix/gosam"
+	"github.com/eyedeekay/gosam"
 )
 
 // JumpHelper is a struct that prioritizes i2p address sources
@@ -84,6 +84,14 @@ func (j *JumpHelper) SearchAddressBook(pk string) []string {
 			}
 		}
 	}
+	for _, a := range j.remoteAddressBook {
+		r := strings.SplitN(a, ",", 2)
+		if len(r) == 2 {
+			if r[0] == j.trim(k.Host) {
+				return r
+			}
+		}
+	}
 	return nil
 }
 
@@ -103,11 +111,12 @@ func (j *JumpHelper) CheckAddressBook(pk string) bool {
 }
 
 // NewJumpHelper creates a new JumpHelper object
-func NewJumpHelper(addressBookPath, host, port string) (*JumpHelper, error) {
+func NewJumpHelper(addressBookPath, host, port string, use bool) (*JumpHelper, error) {
 	return NewJumpHelperFromOptions(
 		SetJumpHelperAddressBookPath(addressBookPath),
 		SetJumpHelperHost(host),
 		SetJumpHelperPort(port),
+		SetJumpHelperUseHelper(use),
 	)
 }
 
@@ -117,7 +126,7 @@ func NewJumpHelperFromOptions(opts ...func(*JumpHelper) error) (*JumpHelper, err
 	j.addressBookPath = "/var/lib/i2pd/addressbook/addresses.csv"
 	j.samHost = "127.0.0.1"
 	j.samPort = "7056"
-	j.ext = true
+	j.ext = false
 	for _, o := range opts {
 		if err := o(&j); err != nil {
 			return nil, fmt.Errorf("Service configuration error: %s", err)
@@ -128,7 +137,10 @@ func NewJumpHelperFromOptions(opts ...func(*JumpHelper) error) (*JumpHelper, err
 		return nil, err
 	}
 	if j.ext {
-		j.samBridgeConn, err = goSam.NewClient(j.samHost + ":" + j.samPort)
+		j.samBridgeConn, err = goSam.NewClientFromOptions(goSam.SetHost(j.samHost), goSam.SetPort(j.samPort))
+		if err != nil {
+			return nil, err
+		}
 		j.tr = &http.Transport{
 			Dial: j.samBridgeConn.Dial,
 		}
