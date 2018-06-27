@@ -114,7 +114,7 @@ func NewServerFromOptions(opts ...func(*Server) error) (*Server, error) {
 		}
 	}
 	s.limiter = rate.NewLimiter(s.Rate(), s.burst)
-	s.jumpHelper, s.err = NewJumpHelper(s.addressBookPath)
+	s.jumpHelper, s.err = NewJumpHelper(s.addressBookPath, "127.0.0.1", "7054")
 	if s.err != nil {
 		return nil, fmt.Errorf("Jump helper load error: %s", s.err)
 	}
