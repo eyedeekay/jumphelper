@@ -59,8 +59,7 @@ func (j *JumpHelper) SyncRemoteAddressBooks() error {
 			if e != nil {
 				return e
 			}
-			fmt.Println(s)
-			j.remoteAddressBook = append(j.remoteAddressBook, kv[0]+","+strings.Replace(s, ".b32.i2p","",-1))
+			j.remoteAddressBook = append(j.remoteAddressBook, kv[0]+","+s)
 		}
 	}
 	return nil

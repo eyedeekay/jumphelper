@@ -14,6 +14,7 @@ docker:
 
 docker-run: docker-clean
 	docker run -i -t -d \
+		--net host \
 		-p 127.0.0.1:7055:7054 \
 		--name jumphelper \
 		eyedeekay/jumphelper

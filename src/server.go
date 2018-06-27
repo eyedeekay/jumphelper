@@ -162,7 +162,7 @@ func Service() {
 	go s.Serve()
 }
 
-// NewService quickly generates a service with host, port, book strings
+// NewService quickly generates a service with host, port, book strings and fires off a goroutine
 func NewService(host, port, book, samhost, samport string) {
 	log.Println("Starting server:")
 	s, err := NewServerFromOptions(
@@ -178,6 +178,24 @@ func NewService(host, port, book, samhost, samport string) {
 		log.Fatal(err, "Error starting server")
 	}
 	go s.Serve()
+}
+
+// NewServiceNoRoutine quickly generates a service with host, port, book strings
+func NewServiceNoRoutine(host, port, book, samhost, samport string) {
+	log.Println("Starting server:")
+	s, err := NewServerFromOptions(
+		SetServerHost(host),
+		SetServerPort(port),
+		SetServerAddressBookPath(book),
+		SetServerRate(0),
+		SetServerBurst(1),
+		SetServerJumpHelperHost(samhost),
+		SetServerJumpHelperPort(samport),
+	)
+	if err != nil {
+		log.Fatal(err, "Error starting server")
+	}
+	s.Serve()
 }
 
 func service() {
