@@ -124,6 +124,28 @@ func NewServerFromOptions(opts ...func(*Server) error) (*Server, error) {
 // Service quickly generates a service with the defaults.
 func Service() {
 	log.Println("Starting server:")
+	host := "127.0.0.1"
+	port := "7054"
+	book := "../addresses.csv"
+	s, err := NewServerFromOptions(SetServerHost(host), SetServerPort(port), SetServerAddressBookPath(book), SetServerRate(0), SetServerBurst(1))
+	if err != nil {
+		log.Fatal(err, "Error starting server")
+	}
+	go s.Serve()
+}
+
+// NewService quickly generates a service with host, port, book strings
+func NewService(host, port, book string) {
+	log.Println("Starting server:")
+	s, err := NewServerFromOptions(SetServerHost(host), SetServerPort(port), SetServerAddressBookPath(book), SetServerRate(0), SetServerBurst(1))
+	if err != nil {
+		log.Fatal(err, "Error starting server")
+	}
+	go s.Serve()
+}
+
+func service() {
+	log.Println("Starting server:")
 	host := "0.0.0.0"
 	port := "7054"
 	book := "../addresses.csv"

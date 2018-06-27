@@ -51,7 +51,7 @@ func ServiceHarderRequest(c *Client) {
 }
 
 func TestService(t *testing.T) {
-	Service()
+	service()
 	c := ServiceStart()
 	ServiceCheck(c)
 	ServiceHarderCheck(c)
