@@ -113,7 +113,7 @@ func NewServerFromOptions(opts ...func(*Server) error) (*Server, error) {
 	s.addressBookPath = "/var/lib/i2pd/addressbook/addresses.csv"
 	s.rate = 1
 	s.burst = 1
-	s.ext = false
+	s.ext = true
 	for _, o := range opts {
 		if err := o(&s); err != nil {
 			return nil, fmt.Errorf("Service configuration error: %s", err)
@@ -185,7 +185,7 @@ func service() {
 		SetServerBurst(1),
 		SetServerUseHelper(false),
         SetServerJumpHelperHost("127.0.0.1"),
-		SetServerJumpHelperPort("7054"),
+		SetServerJumpHelperPort("7056"),
 	)
 	if err != nil {
 		log.Fatal(err, "Error starting server")
