@@ -57,3 +57,17 @@ func SetJumpHelperUseHelper(s bool) func(*JumpHelper) error {
 		return nil
 	}
 }
+
+//SetJumpHelperSubscription sets the port of the Server client's SAM bridge
+func SetJumpHelperSubscription(s []string) func(*JumpHelper) error {
+	return func(c *JumpHelper) error {
+		if s != nil {
+			for _, d := range s {
+				c.subscriptionURLs = append(c.subscriptionURLs, d)
+			}
+			return nil
+		}
+		c.subscriptionURLs = append(c.subscriptionURLs, "http://joajgazyztfssty4w2on5oaqksz6tqoxbduy553y34mf4byv6gpq.b32.i2p/export/alive-hosts.txt")
+		return nil
+	}
+}

@@ -13,7 +13,8 @@ import (
 
 // JumpHelper is a struct that prioritizes i2p address sources
 type JumpHelper struct {
-	addressBookPath string
+	addressBookPath  string
+	subscriptionURLs []string
 
 	samHost string
 	samPort string
@@ -124,12 +125,13 @@ func (j *JumpHelper) CheckAddressBook(pk string) bool {
 }
 
 // NewJumpHelper creates a new JumpHelper object
-func NewJumpHelper(addressBookPath, host, port string, use bool) (*JumpHelper, error) {
+func NewJumpHelper(addressBookPath, host, port string, subs []string, use bool) (*JumpHelper, error) {
 	return NewJumpHelperFromOptions(
 		SetJumpHelperAddressBookPath(addressBookPath),
 		SetJumpHelperHost(host),
 		SetJumpHelperPort(port),
 		SetJumpHelperUseHelper(use),
+		SetJumpHelperSubscription(subs),
 	)
 }
 

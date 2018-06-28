@@ -32,9 +32,9 @@ func main() {
 
 	flag.Parse()
 
-    if len(subscriptions) < 1 {
-        subscriptions = append(subscriptions, "http://joajgazyztfssty4w2on5oaqksz6tqoxbduy553y34mf4byv6gpq.b32.i2p/export/alive-hosts.txt")
-    }
+	if len(subscriptions) < 1 {
+		subscriptions = append(subscriptions, "http://joajgazyztfssty4w2on5oaqksz6tqoxbduy553y34mf4byv6gpq.b32.i2p/export/alive-hosts.txt")
+	}
 
 	s, err := jumphelper.NewServer(*host, *port, *book, *samhost, *samport, subscriptions, *useremote)
 	if err != nil {

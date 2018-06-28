@@ -111,7 +111,7 @@ func NewServer(host, port, book, samhost, samport string, subs []string, useh bo
 		SetServerJumpHelperHost(samhost),
 		SetServerJumpHelperPort(samport),
 		SetServerUseHelper(useh),
-        SetServerSubscription(subs),
+		SetServerSubscription(subs),
 	)
 }
 
@@ -126,7 +126,7 @@ func NewServerFromOptions(opts ...func(*Server) error) (*Server, error) {
 	s.rate = 1
 	s.burst = 1
 	s.ext = true
-    s.subscriptionURLs = []string {"http://joajgazyztfssty4w2on5oaqksz6tqoxbduy553y34mf4byv6gpq.b32.i2p/export/alive-hosts.txt"}
+	s.subscriptionURLs = []string{"http://joajgazyztfssty4w2on5oaqksz6tqoxbduy553y34mf4byv6gpq.b32.i2p/export/alive-hosts.txt"}
 	for _, o := range opts {
 		if err := o(&s); err != nil {
 			return nil, fmt.Errorf("Service configuration error: %s", err)
@@ -177,10 +177,10 @@ func NewService(host, port, book, samhost, samport string, subs []string, useh b
 		SetServerAddressBookPath(book),
 		SetServerRate(1),
 		SetServerBurst(1),
-        SetServerUseHelper(useh),
+		SetServerUseHelper(useh),
 		SetServerJumpHelperHost(samhost),
 		SetServerJumpHelperPort(samport),
-        SetServerSubscription(subs),
+		SetServerSubscription(subs),
 	)
 	if err != nil {
 		log.Fatal(err, "Error starting server")
@@ -200,7 +200,7 @@ func NewServiceNoRoutine(host, port, book, samhost, samport string, subs []strin
 		SetServerUseHelper(useh),
 		SetServerJumpHelperHost(samhost),
 		SetServerJumpHelperPort(samport),
-        SetServerSubscription(subs),
+		SetServerSubscription(subs),
 	)
 	if err != nil {
 		log.Fatal(err, "Error starting server")
