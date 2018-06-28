@@ -145,7 +145,7 @@ func NewJumpHelperFromOptions(opts ...func(*JumpHelper) error) (*JumpHelper, err
 	j.samHost = "127.0.0.1"
 	j.samPort = "7656"
 	j.ext = false
-    s.subscriptionURLs = []string{"http://joajgazyztfssty4w2on5oaqksz6tqoxbduy553y34mf4byv6gpq.b32.i2p/export/alive-hosts.txt"}
+    j.subscriptionURLs = []string{"http://joajgazyztfssty4w2on5oaqksz6tqoxbduy553y34mf4byv6gpq.b32.i2p/export/alive-hosts.txt"}
 	for _, o := range opts {
 		if err := o(&j); err != nil {
 			return nil, fmt.Errorf("Service configuration error: %s", err)
@@ -156,7 +156,7 @@ func NewJumpHelperFromOptions(opts ...func(*JumpHelper) error) (*JumpHelper, err
 		return nil, err
 	}
     if len(j.subscriptionURLs) < 1 {
-		s.ext = false
+		j.ext = false
 	}
 	if j.ext {
 		j.samBridgeConn, err = goSam.NewClientFromOptions(

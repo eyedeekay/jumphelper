@@ -11,7 +11,8 @@ func TestJumpHelperLocal(t *testing.T) {
 		log.Fatal(err)
 	}
 	x := jh.SearchAddressBook("i2p-projekt.i2p")
-	log.Println("Testing Jumphelper Locally i2p-projekt.i2p", x)
+    y := jh.SearchAddressBook("forum.i2p")
+	log.Println("Testing Jumphelper Locally i2p-projekt.i2p", x, "i2pforum.i2p", y)
 	printKvs(x)
 }
 
@@ -21,7 +22,8 @@ func TestJumpHelperLocalBool(t *testing.T) {
 		log.Fatal(err)
 	}
 	x := jh.CheckAddressBook("i2p-projekt.i2p")
-	log.Println("Testing Jumphelper Locally i2p-projekt.i2p", x)
+    y := jh.CheckAddressBook("forum.i2p")
+	log.Println("Testing Jumphelper Locally i2p-projekt.i2p", x, "i2pforum.i2p", y)
 }
 
 func TestJumpHelperLocalA(t *testing.T) {
@@ -30,7 +32,8 @@ func TestJumpHelperLocalA(t *testing.T) {
 		log.Fatal(err)
 	}
 	x := jh.SearchAddressBook("http://i2p-projekt.i2p")
-	log.Println("Testing Jumphelper Locally http://i2p-projekt.i2p", x)
+    y := jh.SearchAddressBook("http://forum.i2p")
+	log.Println("Testing Jumphelper Locally http://i2p-projekt.i2p", x, "http://i2pforum.i2p", y)
 }
 
 func TestJumpHelperLocalBoolA(t *testing.T) {
@@ -39,5 +42,7 @@ func TestJumpHelperLocalBoolA(t *testing.T) {
 		log.Fatal(err)
 	}
 	x := jh.CheckAddressBook("http://i2p-projekt.i2p")
-	log.Println("Testing Jumphelper Locally http://i2p-projekt.i2p", x)
+    y := jh.CheckAddressBook("http://forum.i2p")
+	log.Println("Testing Jumphelper Locally http://i2p-projekt.i2p", x, "http://i2pforum.i2p", y)
 }
+

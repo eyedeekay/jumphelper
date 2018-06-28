@@ -61,7 +61,7 @@ echo:
 	sleep "$(time)"
 
 forum:
-	./bin/ijh -url="i2pforum.i2p/" -port="7054" -addr=true
+	./bin/ijh -url="forum.i2p/" -port="7054" -addr=true
 
 doecho:
 	while true; do make echo; done
