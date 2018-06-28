@@ -62,7 +62,7 @@ func (j *JumpHelper) SyncRemoteAddressBooks() error {
 			j.remoteAddressBook = append(j.remoteAddressBook, kv[0]+","+s)
 		}
 	}
-    fmt.Println("Subscription Contents Synced")
+	fmt.Println("Subscription Contents Synced")
 	return nil
 }
 

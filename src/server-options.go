@@ -73,3 +73,13 @@ func SetServerUseHelper(s bool) func(*Server) error {
 		return nil
 	}
 }
+
+//SetServerSubscription sets the port of the Server client's SAM bridge
+func SetServerSubscription(s []string) func(*Server) error {
+	return func(c *Server) error {
+		for _, d := range s {
+			c.subscriptionURLs = append(c.subscriptionURLs, d)
+		}
+        return nil
+	}
+}
