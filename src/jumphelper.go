@@ -62,6 +62,7 @@ func (j *JumpHelper) SyncRemoteAddressBooks() error {
 			j.remoteAddressBook = append(j.remoteAddressBook, kv[0]+","+s)
 		}
 	}
+    fmt.Println("Subscription Contents Synced")
 	return nil
 }
 
@@ -90,17 +91,16 @@ func (j *JumpHelper) SearchAddressBook(pk string) []string {
 		r := strings.SplitN(a, ",", 2)
 		if len(r) == 2 {
 			if r[0] == j.trim(k.Host) {
-                printKvs(r)
+				printKvs(r)
 				return r
 			}
 		}
 	}
 	for _, a := range j.remoteAddressBook {
 		r := strings.SplitN(a, ",", 2)
-        printKvs(r)
 		if len(r) == 2 {
-
 			if r[0] == j.trim(k.Host) {
+				printKvs(r)
 				return r
 			}
 		}
@@ -153,9 +153,9 @@ func NewJumpHelperFromOptions(opts ...func(*JumpHelper) error) (*JumpHelper, err
 		j.samBridgeConn, err = goSam.NewClientFromOptions(
 			goSam.SetHost(j.samHost),
 			goSam.SetPort(j.samPort),
-            goSam.SetInQuantity(15),
-            goSam.SetOutQuantity(5),
-            goSam.SetUnpublished(true),
+			goSam.SetInQuantity(15),
+			goSam.SetOutQuantity(5),
+			goSam.SetUnpublished(true),
 		)
 		if err != nil {
 			return nil, err

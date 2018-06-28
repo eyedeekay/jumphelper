@@ -71,11 +71,13 @@ func (s *Server) HandleExists(w http.ResponseWriter, r *http.Request) {
 func (s *Server) HandleJump(w http.ResponseWriter, r *http.Request) {
 	p := strings.TrimPrefix(strings.Replace(r.URL.Path, "request/", "", 1), "/")
 	if s.jumpHelper.CheckAddressBook(p) {
-		line := "http://" + s.jumpHelper.SearchAddressBook(p)[1] + ".b32.i2p"
-		w.Header().Set("Location", line)
-		w.WriteHeader(301)
-		fmt.Fprintln(w, line)
-		return
+		if s.jumpHelper.SearchAddressBook(p)[1] != nil {
+			line := "http://" + s.jumpHelper.SearchAddressBook(p)[1] + ".b32.i2p"
+			w.Header().Set("Location", line)
+			w.WriteHeader(301)
+			fmt.Fprintln(w, line)
+			return
+		}
 	}
 	fmt.Fprintln(w, "FALSE")
 	return

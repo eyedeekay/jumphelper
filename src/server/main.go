@@ -15,7 +15,7 @@ func main() {
 	samhost := flag.String("samhost", "127.0.0.1", "Host address to listen on.")
 	samport := flag.String("samport", "7656", "Port to listen on.")
 	book := flag.String("hostfile", "./addresses.csv", "Local address book")
-    //useremote := flag.Bool("useremote", false, "Use external address books")
+	//useremote := flag.Bool("useremote", false, "Use external address books")
 
 	flag.Parse()
 
