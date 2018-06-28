@@ -58,7 +58,7 @@ func SetJumpHelperUseHelper(s bool) func(*JumpHelper) error {
 	}
 }
 
-//SetJumpHelperSubscription sets the port of the Server client's SAM bridge
+//SetJumpHelperSubscription sets the subscription list slice contents
 func SetJumpHelperSubscription(s []string) func(*JumpHelper) error {
 	return func(c *JumpHelper) error {
 		if s != nil {

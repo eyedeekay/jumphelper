@@ -19,8 +19,9 @@ type JumpHelper struct {
 	samHost string
 	samPort string
 
+    ext           bool
+
 	samBridgeConn *goSam.Client
-	ext           bool
 
 	tr     *http.Transport
 	client *http.Client
@@ -41,29 +42,31 @@ func (j *JumpHelper) LoadAddressBook() error {
 
 // SyncRemoteAddressBooks syncs addressbooks from subscription services to the standalone addressbook
 func (j *JumpHelper) SyncRemoteAddressBooks() error {
-	fmt.Println("Syncing Subscription Contents")
-	resp, err := j.client.Get("http://joajgazyztfssty4w2on5oaqksz6tqoxbduy553y34mf4byv6gpq.b32.i2p/export/alive-hosts.txt")
-	if err != nil {
-		return err
-	}
-	defer resp.Body.Close()
-	b, e := ioutil.ReadAll(resp.Body)
-	if e != nil {
-		return e
-	}
-	lines := strings.Split(string(b), "\n")
-	for _, l := range lines {
-		kv := strings.Split(l, "=")
-		if len(kv) == 2 {
-			i := i2pconv.I2pconv{}
-			s, e := i.I2p64to32(kv[1])
-			if e != nil {
-				return e
-			}
-			j.remoteAddressBook = append(j.remoteAddressBook, kv[0]+","+s)
+	for _, suburl := range j.subscriptionURLs {
+		fmt.Println("Syncing Subscription Contents")
+		resp, err := j.client.Get(suburl)
+		if err != nil {
+			return err
 		}
+		defer resp.Body.Close()
+		b, e := ioutil.ReadAll(resp.Body)
+		if e != nil {
+			return e
+		}
+		lines := strings.Split(string(b), "\n")
+		for _, l := range lines {
+			kv := strings.Split(l, "=")
+			if len(kv) == 2 {
+				i := i2pconv.I2pconv{}
+				s, e := i.I2p64to32(kv[1])
+				if e != nil {
+					return e
+				}
+				j.remoteAddressBook = append(j.remoteAddressBook, kv[0]+","+s)
+			}
+		}
+		fmt.Println("Subscription Contents Synced")
 	}
-	fmt.Println("Subscription Contents Synced")
 	return nil
 }
 
@@ -140,8 +143,9 @@ func NewJumpHelperFromOptions(opts ...func(*JumpHelper) error) (*JumpHelper, err
 	var j JumpHelper
 	j.addressBookPath = "/var/lib/i2pd/addressbook/addresses.csv"
 	j.samHost = "127.0.0.1"
-	j.samPort = "7056"
+	j.samPort = "7656"
 	j.ext = false
+    s.subscriptionURLs = []string{"http://joajgazyztfssty4w2on5oaqksz6tqoxbduy553y34mf4byv6gpq.b32.i2p/export/alive-hosts.txt"}
 	for _, o := range opts {
 		if err := o(&j); err != nil {
 			return nil, fmt.Errorf("Service configuration error: %s", err)
@@ -150,6 +154,9 @@ func NewJumpHelperFromOptions(opts ...func(*JumpHelper) error) (*JumpHelper, err
 	err := j.LoadAddressBook()
 	if err != nil {
 		return nil, err
+	}
+    if len(j.subscriptionURLs) < 1 {
+		s.ext = false
 	}
 	if j.ext {
 		j.samBridgeConn, err = goSam.NewClientFromOptions(

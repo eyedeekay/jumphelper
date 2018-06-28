@@ -23,10 +23,10 @@ type Server struct {
 	ext              bool
 	subscriptionURLs []string
 
-	limiter *rate.Limiter
-	rate    int
+    rate    int
 	burst   int
 
+	limiter *rate.Limiter
 	err error
 }
 
@@ -139,6 +139,9 @@ func NewServerFromOptions(opts ...func(*Server) error) (*Server, error) {
 		SetJumpHelperPort(s.samPort),
 		SetJumpHelperUseHelper(s.ext),
 	)
+	if len(s.subscriptionURLs) < 1 {
+		s.ext = false
+	}
 	if s.err != nil {
 		return nil, fmt.Errorf("Jump helper load error: %s", s.err)
 	}

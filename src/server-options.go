@@ -74,7 +74,7 @@ func SetServerUseHelper(s bool) func(*Server) error {
 	}
 }
 
-//SetServerSubscription sets the port of the Server client's SAM bridge
+//SetServerSubscription sets the subscription list slice contents
 func SetServerSubscription(s []string) func(*Server) error {
 	return func(c *Server) error {
 		if s != nil {
@@ -84,6 +84,6 @@ func SetServerSubscription(s []string) func(*Server) error {
 			return nil
 		}
 		c.subscriptionURLs = append(c.subscriptionURLs, "http://joajgazyztfssty4w2on5oaqksz6tqoxbduy553y34mf4byv6gpq.b32.i2p/export/alive-hosts.txt")
-        return nil
+		return nil
 	}
 }
