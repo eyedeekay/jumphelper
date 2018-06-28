@@ -23,11 +23,11 @@ type Server struct {
 	ext              bool
 	subscriptionURLs []string
 
-    rate    int
-	burst   int
+	rate  int
+	burst int
 
 	limiter *rate.Limiter
-	err error
+	err     error
 }
 
 func (s *Server) address() string {

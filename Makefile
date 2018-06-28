@@ -76,3 +76,7 @@ deps:
 
 follow:
 	docker logs -f jumphelper
+
+diff:
+	diff -d <(sort -u alive-hosts.txt | sed 's|=.*||g') <(sort -u addresses.csv | sed 's|,.*||g')
+

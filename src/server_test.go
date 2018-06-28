@@ -21,6 +21,11 @@ func ServiceCheck(c *Client) {
 	} else {
 		log.Fatal(e)
 	}
+	if b, _ := c.Check("forum.i2p"); b {
+		log.Fatal("Found forum.i2p in addressbook")
+	} else {
+		log.Println("Subaddress forum.i2p not found, this is correct")
+	}
 }
 
 func ServiceHarderCheck(c *Client) {
@@ -38,6 +43,11 @@ func ServiceRequest(c *Client) {
 		log.Println("Found", b, "in addressbook")
 	} else {
 		log.Fatal(e)
+	}
+	if b, _ := c.Check("forum.i2p"); b {
+		log.Println("Found forum.i2p in addressbook")
+	} else {
+		log.Fatal("Subaddress forum.i2p not found, this is incorrect")
 	}
 }
 

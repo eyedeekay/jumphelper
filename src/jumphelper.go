@@ -19,7 +19,7 @@ type JumpHelper struct {
 	samHost string
 	samPort string
 
-    ext           bool
+	ext bool
 
 	samBridgeConn *goSam.Client
 
@@ -119,9 +119,13 @@ func (j *JumpHelper) CheckAddressBook(pk string) bool {
 		return false
 	}
 	for _, a := range j.addressBook {
-		r := strings.SplitN(a, ",", -1)[0]
-		if r == j.trim(k.Host) {
-			return true
+		r := strings.SplitN(a, ",", -1)
+		if len(r) == 2 {
+			if j.trim(r[0]) == j.trim(k.Host) {
+                fmt.Println("Found Address")
+                printKvs(r)
+				return true
+			}
 		}
 	}
 	return false
@@ -145,7 +149,7 @@ func NewJumpHelperFromOptions(opts ...func(*JumpHelper) error) (*JumpHelper, err
 	j.samHost = "127.0.0.1"
 	j.samPort = "7656"
 	j.ext = false
-    j.subscriptionURLs = []string{"http://joajgazyztfssty4w2on5oaqksz6tqoxbduy553y34mf4byv6gpq.b32.i2p/export/alive-hosts.txt"}
+	j.subscriptionURLs = []string{"http://joajgazyztfssty4w2on5oaqksz6tqoxbduy553y34mf4byv6gpq.b32.i2p/export/alive-hosts.txt"}
 	for _, o := range opts {
 		if err := o(&j); err != nil {
 			return nil, fmt.Errorf("Service configuration error: %s", err)
@@ -155,7 +159,7 @@ func NewJumpHelperFromOptions(opts ...func(*JumpHelper) error) (*JumpHelper, err
 	if err != nil {
 		return nil, err
 	}
-    if len(j.subscriptionURLs) < 1 {
+	if len(j.subscriptionURLs) < 1 {
 		j.ext = false
 	}
 	if j.ext {
