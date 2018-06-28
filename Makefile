@@ -78,5 +78,5 @@ follow:
 	docker logs -f jumphelper
 
 diff:
-	diff -d <(sort -u alive-hosts.txt | sed 's|=.*||g') <(sort -u addresses.csv | sed 's|,.*||g')
+	bash -c "diff -d <(sort -u alive-hosts.txt | sed 's|=.*||g') <(sort -u <(sort -u addresses.csv | sed 's|,.*||g') <(sort -u alive-hosts.txt | sed 's|=.*||g'))" 1> candidates.diff
 

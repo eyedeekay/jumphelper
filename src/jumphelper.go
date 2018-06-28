@@ -122,8 +122,8 @@ func (j *JumpHelper) CheckAddressBook(pk string) bool {
 		r := strings.SplitN(a, ",", -1)
 		if len(r) == 2 {
 			if j.trim(r[0]) == j.trim(k.Host) {
-                fmt.Println("Found Address")
-                printKvs(r)
+				fmt.Println("Found Address")
+				printKvs(r)
 				return true
 			}
 		}
