@@ -15,12 +15,16 @@ docker:
 docker-run: docker-clean
 	docker run -i -t -d \
 		--net host \
-		-p 127.0.0.1:7055:7054 \
+		-p 127.0.0.1:7054:7054 \
 		--name jumphelper \
 		eyedeekay/jumphelper
 
 docker-clean:
 	docker rm -f jumphelper; true
+
+install:
+	install -m755 bin/ijh /usr/bin
+	install -m755 bin/jumphelper /usr/bin
 
 clean:
 	rm -f bin/*
@@ -80,3 +84,8 @@ follow:
 diff:
 	bash -c "diff -d <(sort -u alive-hosts.txt | sed 's|=.*||g') <(sort -u <(sort -u addresses.csv | sed 's|,.*||g') <(sort -u alive-hosts.txt | sed 's|=.*||g'))" 1> candidates.diff
 
+start:
+	while true; do make docker docker-run follow; done
+
+stop:
+	docker rm -f jumphelper; true

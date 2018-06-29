@@ -3,9 +3,11 @@ package jumphelper
 import (
 	"log"
 	"testing"
+    "time"
 )
 
 func ServiceStart() *Client {
+    NewService("127.0.0.1","7054","../addresses.csv","127.0.0.1","7656", nil ,false)
 	log.Printf("testing service start")
 	c, err := NewClient("127.0.0.1", "7054")
 	if err != nil {
@@ -16,20 +18,22 @@ func ServiceStart() *Client {
 
 func ServiceCheck(c *Client) {
 	log.Printf("testing *Client Lookup")
+    time.Sleep(2 * time.Second)
 	if b, e := c.Check("i2p-projekt.i2p"); b {
-		log.Println("Found i2p-projekt.i2p in addressbook")
+		log.Println("Found i2p-projekt.i2p in addressbook", b)
 	} else {
-		log.Fatal(e)
+		log.Fatal("obscure error ",e)
 	}
-	if b, _ := c.Check("forum.i2p"); b {
-		log.Fatal("Found forum.i2p in addressbook")
+	if b, _ := c.Check("fireaxe.i2p"); b {
+		log.Fatal("Found fireaxe.i2p in addressbook")
 	} else {
-		log.Println("Subaddress forum.i2p not found, this is correct")
+		log.Println("Subaddress fireaxe.i2p not found, this is correct",b )
 	}
 }
 
 func ServiceHarderCheck(c *Client) {
 	log.Printf("testing *Client Lookup")
+    time.Sleep(2 * time.Second)
 	if b, e := c.Check("i2p-projekt.i2p/en"); b {
 		log.Println("Found i2p-projekt.i2p in addressbook")
 	} else {
@@ -39,20 +43,22 @@ func ServiceHarderCheck(c *Client) {
 
 func ServiceRequest(c *Client) {
 	log.Printf("testing *Client Request")
+    time.Sleep(2 * time.Second)
 	if b, e := c.Request("i2p-projekt.i2p"); e == nil {
 		log.Println("Found", b, "in addressbook")
 	} else {
 		log.Fatal(e)
 	}
-	if b, _ := c.Check("forum.i2p"); b {
-		log.Println("Found forum.i2p in addressbook")
+	if b, _ := c.Check("fireaxe.i2p"); b {
+		log.Println("Found fireaxe.i2p in addressbook")
 	} else {
-		log.Fatal("Subaddress forum.i2p not found, this is incorrect")
+		log.Fatal("Subaddress fireaxe.i2p not found, this is incorrect")
 	}
 }
 
 func ServiceHarderRequest(c *Client) {
 	log.Printf("testing *Client Request")
+    time.Sleep(2 * time.Second)
 	if b, e := c.Request("i2p-projekt.i2p/en"); e == nil {
 		log.Println("Found", b, "in addressbook")
 	} else {
@@ -61,10 +67,11 @@ func ServiceHarderRequest(c *Client) {
 }
 
 func TestService(t *testing.T) {
-	service()
 	c := ServiceStart()
 	ServiceCheck(c)
 	ServiceHarderCheck(c)
+    time.Sleep(2 * time.Second)
 	ServiceRequest(c)
+    time.Sleep(2 * time.Second)
 	ServiceHarderRequest(c)
 }

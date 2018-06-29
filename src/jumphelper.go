@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+    "log"
 	"strings"
 
 	"github.com/eyedeekay/gosam"
@@ -42,8 +43,8 @@ func (j *JumpHelper) LoadAddressBook() error {
 
 // SyncRemoteAddressBooks syncs addressbooks from subscription services to the standalone addressbook
 func (j *JumpHelper) SyncRemoteAddressBooks() error {
+    log.Println("Syncing Subscription Contents")
 	for _, suburl := range j.subscriptionURLs {
-		fmt.Println("Syncing Subscription Contents")
 		resp, err := j.client.Get(suburl)
 		if err != nil {
 			return err
@@ -55,7 +56,7 @@ func (j *JumpHelper) SyncRemoteAddressBooks() error {
 		}
 		lines := strings.Split(string(b), "\n")
 		for _, l := range lines {
-			kv := strings.Split(l, "=")
+			kv := strings.SplitN(l, "=", 2)
 			if len(kv) == 2 {
 				i := i2pconv.I2pconv{}
 				s, e := i.I2p64to32(kv[1])
@@ -65,7 +66,7 @@ func (j *JumpHelper) SyncRemoteAddressBooks() error {
 				j.remoteAddressBook = append(j.remoteAddressBook, kv[0]+","+s)
 			}
 		}
-		fmt.Println("Subscription Contents Synced")
+		log.Println("Subscription Contents Synced from", suburl)
 	}
 	return nil
 }
@@ -82,6 +83,7 @@ func (j *JumpHelper) trim(k string) string {
 // SearchAddressBook finds a (name, b32) pair in the addressbook, or returns nil of one is not found
 func (j *JumpHelper) SearchAddressBook(pk string) []string {
 	var kv string
+    log.Println("Seeking Address", pk)
 	if !strings.HasPrefix(pk, "http://") {
 		kv = "http://" + pk
 	} else {
@@ -114,15 +116,21 @@ func (j *JumpHelper) SearchAddressBook(pk string) []string {
 
 // CheckAddressBook returns true if an address is present, false if not
 func (j *JumpHelper) CheckAddressBook(pk string) bool {
-	k, e := url.Parse(pk)
+	var kv string
+    log.Println("Seeking Address", pk)
+	if !strings.HasPrefix(pk, "http://") {
+		kv = "http://" + pk
+	} else {
+		kv = pk
+	}
+	k, e := url.Parse(kv)
 	if e != nil {
 		return false
 	}
 	for _, a := range j.addressBook {
-		r := strings.SplitN(a, ",", -1)
+		r := strings.SplitN(a, ",", 2)
 		if len(r) == 2 {
-			if j.trim(r[0]) == j.trim(k.Host) {
-				fmt.Println("Found Address")
+			if r[0] == j.trim(k.Host) {
 				printKvs(r)
 				return true
 			}
@@ -187,6 +195,6 @@ func NewJumpHelperFromOptions(opts ...func(*JumpHelper) error) (*JumpHelper, err
 
 func printKvs(kv []string) {
 	for i, s := range kv {
-		fmt.Println("Key-value Pair", i, s)
+		log.Println("Key-value Pair", i, s)
 	}
 }

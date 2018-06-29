@@ -106,6 +106,8 @@ func NewServer(host, port, book, samhost, samport string, subs []string, useh bo
 		SetServerHost(host),
 		SetServerPort(port),
 		SetServerAddressBookPath(book),
+        SetServerRate(0),
+		SetServerBurst(1),
 		SetServerJumpHelperHost(samhost),
 		SetServerJumpHelperPort(samport),
 		SetServerUseHelper(useh),
@@ -222,6 +224,7 @@ func service() {
 		SetServerUseHelper(false),
 		SetServerJumpHelperHost("127.0.0.1"),
 		SetServerJumpHelperPort("7656"),
+        SetServerSubscription([]string{"http://joajgazyztfssty4w2on5oaqksz6tqoxbduy553y34mf4byv6gpq.b32.i2p/export/alive-hosts.txt"}),
 	)
 	if err != nil {
 		log.Fatal(err, "Error starting server")
