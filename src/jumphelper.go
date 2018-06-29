@@ -3,9 +3,9 @@ package jumphelper
 import (
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"net/url"
-    "log"
 	"strings"
 
 	"github.com/eyedeekay/gosam"
@@ -20,7 +20,8 @@ type JumpHelper struct {
 	samHost string
 	samPort string
 
-	ext bool
+	ext     bool
+	verbose bool
 
 	samBridgeConn *goSam.Client
 
@@ -43,7 +44,7 @@ func (j *JumpHelper) LoadAddressBook() error {
 
 // SyncRemoteAddressBooks syncs addressbooks from subscription services to the standalone addressbook
 func (j *JumpHelper) SyncRemoteAddressBooks() error {
-    log.Println("Syncing Subscription Contents")
+	log.Println("Syncing Subscription Contents")
 	for _, suburl := range j.subscriptionURLs {
 		resp, err := j.client.Get(suburl)
 		if err != nil {
@@ -83,7 +84,7 @@ func (j *JumpHelper) trim(k string) string {
 // SearchAddressBook finds a (name, b32) pair in the addressbook, or returns nil of one is not found
 func (j *JumpHelper) SearchAddressBook(pk string) []string {
 	var kv string
-    log.Println("Seeking Address", pk)
+	log.Println("Seeking Address", pk)
 	if !strings.HasPrefix(pk, "http://") {
 		kv = "http://" + pk
 	} else {
@@ -97,7 +98,7 @@ func (j *JumpHelper) SearchAddressBook(pk string) []string {
 		r := strings.SplitN(a, ",", 2)
 		if len(r) == 2 {
 			if r[0] == j.trim(k.Host) {
-				printKvs(r)
+				j.printKvs(r)
 				return r
 			}
 		}
@@ -106,7 +107,7 @@ func (j *JumpHelper) SearchAddressBook(pk string) []string {
 		r := strings.SplitN(a, ",", 2)
 		if len(r) == 2 {
 			if r[0] == j.trim(k.Host) {
-				printKvs(r)
+				j.printKvs(r)
 				return r
 			}
 		}
@@ -117,13 +118,14 @@ func (j *JumpHelper) SearchAddressBook(pk string) []string {
 // CheckAddressBook returns true if an address is present, false if not
 func (j *JumpHelper) CheckAddressBook(pk string) bool {
 	var kv string
-    log.Println("Seeking Address", pk)
+	log.Println("Seeking Address", pk)
 	if !strings.HasPrefix(pk, "http://") {
 		kv = "http://" + pk
 	} else {
 		kv = pk
 	}
 	k, e := url.Parse(kv)
+	log.Println("test", k.Host)
 	if e != nil {
 		return false
 	}
@@ -131,7 +133,7 @@ func (j *JumpHelper) CheckAddressBook(pk string) bool {
 		r := strings.SplitN(a, ",", 2)
 		if len(r) == 2 {
 			if r[0] == j.trim(k.Host) {
-				printKvs(r)
+				j.printKvs(r)
 				return true
 			}
 		}
@@ -170,6 +172,7 @@ func NewJumpHelperFromOptions(opts ...func(*JumpHelper) error) (*JumpHelper, err
 	if len(j.subscriptionURLs) < 1 {
 		j.ext = false
 	}
+	log.Println("Creating a jumphelper")
 	if j.ext {
 		j.samBridgeConn, err = goSam.NewClientFromOptions(
 			goSam.SetHost(j.samHost),
@@ -193,8 +196,14 @@ func NewJumpHelperFromOptions(opts ...func(*JumpHelper) error) (*JumpHelper, err
 	return &j, err
 }
 
-func printKvs(kv []string) {
-	for i, s := range kv {
-		log.Println("Key-value Pair", i, s)
+func (j *JumpHelper) printKvs(kv []string) {
+	if j.verbose {
+		for i, s := range kv {
+			log.Println("Key-value Pair", i, s)
+		}
 	}
+}
+
+func (j *JumpHelper) Subs() []string {
+	return j.remoteAddressBook
 }

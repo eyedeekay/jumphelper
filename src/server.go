@@ -21,7 +21,9 @@ type Server struct {
 	jumpHelper       *JumpHelper
 	localService     *http.ServeMux
 	ext              bool
+	verbose          bool
 	subscriptionURLs []string
+    listing         bool
 
 	rate  int
 	burst int
@@ -82,11 +84,27 @@ func (s *Server) HandleJump(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
+// HandleListing lists all synced remote jumphelper urls.
+func (s *Server) HandleListing(w http.ResponseWriter, r *http.Request) {
+    if s.listing {
+        for _, s := range s.jumpHelper.Subs() {
+            fmt.Fprintln(w, s)
+        }
+        return
+    }
+    fmt.Fprintln(w, "Listings disabled for this server")
+    return
+}
+
 // NewMux sets up a new ServeMux with handlers
 func (s *Server) NewMux() (*http.ServeMux, error) {
 	s.localService = http.NewServeMux()
-	s.localService.Handle("/check/", http.HandlerFunc(s.HandleExists))
-	s.localService.Handle("/request/", http.HandlerFunc(s.HandleJump))
+	s.localService.HandleFunc("/check/", s.HandleExists)
+	s.localService.HandleFunc("/request/", s.HandleJump)
+	s.localService.HandleFunc("/sub/", s.HandleListing)
+	s.localService.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintln(w, "Dave's not here man.")
+	})
 	if s.err != nil {
 		return nil, fmt.Errorf("Local mux configuration error: %s", s.err)
 	}
@@ -100,18 +118,17 @@ func (s *Server) Rate() rate.Limit {
 }
 
 // NewServer creates a new Server that answers jump-related queries
-func NewServer(host, port, book, samhost, samport string, subs []string, useh bool) (*Server, error) {
-	log.Println("Starting server:")
+func NewServer(host, port, book, samhost, samport string, subs []string, useh, verbose, share bool) (*Server, error) {
 	return NewServerFromOptions(
 		SetServerHost(host),
 		SetServerPort(port),
 		SetServerAddressBookPath(book),
-        SetServerRate(0),
-		SetServerBurst(1),
 		SetServerJumpHelperHost(samhost),
 		SetServerJumpHelperPort(samport),
 		SetServerUseHelper(useh),
 		SetServerSubscription(subs),
+		SetServerJumpHelperVerbosity(verbose),
+        SetServerEnableListing(share),
 	)
 }
 
@@ -126,6 +143,8 @@ func NewServerFromOptions(opts ...func(*Server) error) (*Server, error) {
 	s.rate = 1
 	s.burst = 1
 	s.ext = true
+    s.verbose=false
+    s.listing=false
 	s.subscriptionURLs = []string{"http://joajgazyztfssty4w2on5oaqksz6tqoxbduy553y34mf4byv6gpq.b32.i2p/export/alive-hosts.txt"}
 	for _, o := range opts {
 		if err := o(&s); err != nil {
@@ -133,11 +152,13 @@ func NewServerFromOptions(opts ...func(*Server) error) (*Server, error) {
 		}
 	}
 	s.limiter = rate.NewLimiter(s.Rate(), s.burst)
+	log.Println("Configured Rate Limiter")
 	s.jumpHelper, s.err = NewJumpHelperFromOptions(
 		SetJumpHelperAddressBookPath(s.addressBookPath),
 		SetJumpHelperHost(s.samHost),
 		SetJumpHelperPort(s.samPort),
 		SetJumpHelperUseHelper(s.ext),
+		SetJumpHelperVerbosity(s.verbose),
 	)
 	if len(s.subscriptionURLs) < 1 {
 		s.ext = false
@@ -150,21 +171,7 @@ func NewServerFromOptions(opts ...func(*Server) error) (*Server, error) {
 
 // Service quickly generates a service with the defaults.
 func Service() {
-	log.Println("Starting server:")
-	host := "127.0.0.1"
-	port := "7054"
-	samHost := "127.0.0.1"
-	samPort := "7056"
-	book := "../addresses.csv"
-	s, err := NewServerFromOptions(
-		SetServerHost(host),
-		SetServerPort(port),
-		SetServerAddressBookPath(book),
-		SetServerRate(1),
-		SetServerBurst(1),
-		SetServerJumpHelperHost(samHost),
-		SetServerJumpHelperPort(samPort),
-	)
+	s, err := NewServerFromOptions()
 	if err != nil {
 		log.Fatal(err, "Error starting server")
 	}
@@ -173,13 +180,10 @@ func Service() {
 
 // NewService quickly generates a service with host, port, book strings and fires off a goroutine
 func NewService(host, port, book, samhost, samport string, subs []string, useh bool) {
-	log.Println("Starting server:")
 	s, err := NewServerFromOptions(
 		SetServerHost(host),
 		SetServerPort(port),
 		SetServerAddressBookPath(book),
-		SetServerRate(1),
-		SetServerBurst(1),
 		SetServerUseHelper(useh),
 		SetServerJumpHelperHost(samhost),
 		SetServerJumpHelperPort(samport),
@@ -191,40 +195,17 @@ func NewService(host, port, book, samhost, samport string, subs []string, useh b
 	go s.Serve()
 }
 
-// NewServiceNoRoutine quickly generates a service with host, port, book strings
-func NewServiceNoRoutine(host, port, book, samhost, samport string, subs []string, useh bool) {
-	log.Println("Starting server:")
-	s, err := NewServerFromOptions(
-		SetServerHost(host),
-		SetServerPort(port),
-		SetServerAddressBookPath(book),
-		SetServerRate(1),
-		SetServerBurst(1),
-		SetServerUseHelper(useh),
-		SetServerJumpHelperHost(samhost),
-		SetServerJumpHelperPort(samport),
-		SetServerSubscription(subs),
-	)
-	if err != nil {
-		log.Fatal(err, "Error starting server")
-	}
-	s.Serve()
-}
-
 func service() {
-	log.Println("Starting server:")
-	host := "0.0.0.0"
-	port := "7054"
-	book := "../addresses.csv"
-	s, err := NewServerFromOptions(SetServerHost(host),
-		SetServerPort(port),
-		SetServerAddressBookPath(book),
-		SetServerRate(0),
-		SetServerBurst(1),
+	s, err := NewServerFromOptions(
+		SetServerHost("0.0.0.0"),
+		SetServerPort("7054"),
+		SetServerAddressBookPath("../addresses.csv"),
+		SetServerRate(1000),
+		SetServerBurst(1000),
 		SetServerUseHelper(false),
 		SetServerJumpHelperHost("127.0.0.1"),
 		SetServerJumpHelperPort("7656"),
-        SetServerSubscription([]string{"http://joajgazyztfssty4w2on5oaqksz6tqoxbduy553y34mf4byv6gpq.b32.i2p/export/alive-hosts.txt"}),
+		SetServerSubscription([]string{"http://joajgazyztfssty4w2on5oaqksz6tqoxbduy553y34mf4byv6gpq.b32.i2p/export/alive-hosts.txt"}),
 	)
 	if err != nil {
 		log.Fatal(err, "Error starting server")

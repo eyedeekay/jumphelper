@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 
-	//"github.com/eyedeekay/jumphelper/src"
 	".."
 )
 
@@ -14,9 +13,10 @@ func main() {
 	port := flag.String("port", "7054", "Port to listen on.")
 	url := flag.String("url", "false", "URL to check.")
 	addr := flag.Bool("addr", false, "Show base32 URL?.")
+	verbose := flag.Bool("verbose", false, "Verbose?.")
 	flag.Parse()
 
-	c, err := jumphelper.NewClient(*host, *port)
+	c, err := jumphelper.NewClient(*host, *port, *verbose)
 	if err != nil {
 		log.Fatal(err, "Error starting client")
 	}
@@ -35,7 +35,7 @@ func main() {
 				}
 			}
 		} else {
-			if s, e := c.Request(*url); s != "" {
+			if s, e := c.Request(*url); s != "FALSE" {
 				fmt.Println("true", s)
 				if e != nil {
 					log.Fatal(e)

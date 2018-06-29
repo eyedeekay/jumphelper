@@ -5,7 +5,7 @@ import (
 	"strconv"
 )
 
-//SetServerJumpHelperHost sets the host of the Server client's SAM bridge
+//SetServerJumpHelperHost sets the host of the Jumphelper Server sync client's SAM bridge
 func SetServerJumpHelperHost(s string) func(*Server) error {
 	return func(c *Server) error {
 		c.samHost = s
@@ -13,7 +13,7 @@ func SetServerJumpHelperHost(s string) func(*Server) error {
 	}
 }
 
-//SetServerJumpHelperPort sets the port of the Server client's SAM bridge
+//SetServerJumpHelperPort sets the port of the Jumphelper Server sync client's SAM bridge
 func SetServerJumpHelperPort(s string) func(*Server) error {
 	return func(c *Server) error {
 		port, err := strconv.Atoi(s)
@@ -28,7 +28,7 @@ func SetServerJumpHelperPort(s string) func(*Server) error {
 	}
 }
 
-//SetServerJumpHelperPortInt sets the port of the Server client's SAM bridge with an int
+//SetServerJumpHelperPortInt sets the port of the Jumphelper Server sync client's SAM bridge with an int
 func SetServerJumpHelperPortInt(s int) func(*Server) error {
 	return func(c *Server) error {
 		if s < 65536 && s > -1 {
@@ -36,5 +36,13 @@ func SetServerJumpHelperPortInt(s int) func(*Server) error {
 			return nil
 		}
 		return fmt.Errorf("Invalid port")
+	}
+}
+
+//SetServerJumpHelperVerbosity sets the verbosity for the server
+func SetServerJumpHelperVerbosity(s bool) func(*Server) error {
+	return func(c *Server) error {
+		c.verbose = s
+		return nil
 	}
 }

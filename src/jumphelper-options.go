@@ -71,3 +71,11 @@ func SetJumpHelperSubscription(s []string) func(*JumpHelper) error {
 		return nil
 	}
 }
+
+//SetJumpHelperVerbosity sets the verbosity for the server
+func SetJumpHelperVerbosity(s bool) func(*JumpHelper) error {
+	return func(c *JumpHelper) error {
+		c.verbose = s
+		return nil
+	}
+}

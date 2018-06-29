@@ -13,7 +13,7 @@ func TestJumpHelperLocal(t *testing.T) {
 	x := jh.SearchAddressBook("i2p-projekt.i2p")
 	y := jh.SearchAddressBook("fireaxe.i2p.i2p")
 	log.Println("Testing Jumphelper Locally i2p-projekt.i2p", x, "fireaxe.i2p", y)
-	printKvs(x)
+	jh.printKvs(x)
 }
 
 func TestJumpHelperLocalBool(t *testing.T) {

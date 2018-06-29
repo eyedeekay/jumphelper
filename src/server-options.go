@@ -87,3 +87,11 @@ func SetServerSubscription(s []string) func(*Server) error {
 		return nil
 	}
 }
+
+//SetServerEnableListing Allows the server to export a list of addresses to others
+func SetServerEnableListing(s bool) func(*Server) error {
+	return func(c *Server) error {
+		c.listing = s
+		return nil
+	}
+}
