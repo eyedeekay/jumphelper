@@ -23,7 +23,7 @@ type Server struct {
 	ext              bool
 	verbose          bool
 	subscriptionURLs []string
-    listing         bool
+	listing          bool
 
 	rate  int
 	burst int
@@ -86,14 +86,14 @@ func (s *Server) HandleJump(w http.ResponseWriter, r *http.Request) {
 
 // HandleListing lists all synced remote jumphelper urls.
 func (s *Server) HandleListing(w http.ResponseWriter, r *http.Request) {
-    if s.listing {
-        for _, s := range s.jumpHelper.Subs() {
-            fmt.Fprintln(w, s)
-        }
-        return
-    }
-    fmt.Fprintln(w, "Listings disabled for this server")
-    return
+	if s.listing {
+		for _, s := range s.jumpHelper.Subs() {
+			fmt.Fprintln(w, s)
+		}
+		return
+	}
+	fmt.Fprintln(w, "Listings disabled for this server")
+	return
 }
 
 // NewMux sets up a new ServeMux with handlers
@@ -128,7 +128,7 @@ func NewServer(host, port, book, samhost, samport string, subs []string, useh, v
 		SetServerUseHelper(useh),
 		SetServerSubscription(subs),
 		SetServerJumpHelperVerbosity(verbose),
-        SetServerEnableListing(share),
+		SetServerEnableListing(share),
 	)
 }
 
@@ -143,8 +143,8 @@ func NewServerFromOptions(opts ...func(*Server) error) (*Server, error) {
 	s.rate = 1
 	s.burst = 1
 	s.ext = true
-    s.verbose=false
-    s.listing=false
+	s.verbose = false
+	s.listing = false
 	s.subscriptionURLs = []string{"http://joajgazyztfssty4w2on5oaqksz6tqoxbduy553y34mf4byv6gpq.b32.i2p/export/alive-hosts.txt"}
 	for _, o := range opts {
 		if err := o(&s); err != nil {

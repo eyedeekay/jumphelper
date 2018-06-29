@@ -7,7 +7,7 @@ import (
 )
 
 func ServiceStart() *Client {
-	NewService("127.0.0.1", "7054", "../addresses.csv", "127.0.0.1", "7656", nil, false)
+	NewService("127.0.0.1", "7054", "../misc/addresses.csv", "127.0.0.1", "7656", nil, false)
 	log.Printf("testing service start")
 	c, err := NewClient("127.0.0.1", "7054", true)
 	if err != nil {

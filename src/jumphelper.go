@@ -204,6 +204,10 @@ func (j *JumpHelper) printKvs(kv []string) {
 	}
 }
 
+// Subs Lists all the known address pairs
 func (j *JumpHelper) Subs() []string {
-	return j.remoteAddressBook
+    var r []string
+    r = append(r, j.addressBook...)
+    r = append(r, j.remoteAddressBook...)
+	return r
 }

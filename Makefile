@@ -10,7 +10,7 @@ t: lint test build
 d: docker docker-run
 
 docker: docker-host
-	docker build -f Dockerfile -t eyedeekay/sam-jumphelper .
+	docker build -f Dockerfile -t eyedeekay/jumphelper .
 
 docker-network:
 	docker network create --subnet 172.81.81.0/29 jumphelper; true
@@ -22,7 +22,7 @@ docker-host: docker-network
 		--network jumphelper \
 		--network-alias jumphelper-sam-host \
 		--hostname jumphelper-sam-host \
-		--link sam-jumphelper \
+		--link jumphelper \
 		--restart always \
 		--ip 172.81.81.2 \
 		-p :4567 \
@@ -31,18 +31,18 @@ docker-host: docker-network
 		-t eyedeekay/sam-host; true
 
 docker-run: docker-network
-	docker rm -f sam-jumphelper; true
+	docker rm -f jumphelper; true
 	docker run \
 		-d \
-		--name sam-jumphelper \
+		--name jumphelper \
 		--network jumphelper \
-		--network-alias sam-jumphelper \
-		--hostname sam-jumphelper \
+		--network-alias jumphelper \
+		--hostname jumphelper \
 		--link jumphelper-sam-host \
 		--restart always \
 		--ip 172.81.81.3 \
 		-p 127.0.0.1:7054:7054 \
-		-t eyedeekay/sam-jumphelper
+		-t eyedeekay/jumphelper
 
 docker-clean:
 	docker rm -f jumphelper; true
@@ -110,7 +110,7 @@ deps:
 	go get -u golang.org/x/time/rate
 
 follow:
-	docker logs -f sam-jumphelper
+	docker logs -f jumphelper
 
 diff:
 	cd misc && grep -vf addresses.csv helped.csv > test.csv
@@ -119,4 +119,4 @@ start:
 	while true; do make docker docker-run follow; done
 
 stop:
-	docker rm -f sam-jumphelper; true
+	docker rm -f jumphelper; true

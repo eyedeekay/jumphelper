@@ -27,7 +27,7 @@ func main() {
 	samport := flag.String("samport", "7656", "Port to listen on.")
 	book := flag.String("hostfile", "./addresses.csv", "Local address book.")
 	useremote := flag.Bool("useremote", true, "Use external address books.")
-    share := flag.Bool("share", false, "Repeat concatenated listings as subscription list")
+	share := flag.Bool("share", false, "Repeat concatenated listings as subscription list")
 	verbose := flag.Bool("verbose", false, "Verbose?")
 
 	flag.Var(&subscriptions, "subs", "Subscription URL(Can be specified multiple times)")
@@ -38,7 +38,9 @@ func main() {
 		subscriptions = append(subscriptions, "http://joajgazyztfssty4w2on5oaqksz6tqoxbduy553y34mf4byv6gpq.b32.i2p/export/alive-hosts.txt")
 	}
 
-	s, err := jumphelper.NewServer(*host, *port, *book, *samhost, *samport, subscriptions, *useremote, *verbose, *share)
+	s, err := jumphelper.NewServer(*host, *port, *book, *samhost, *samport,
+        subscriptions,
+        *useremote, *verbose, *share)
 	if err != nil {
 		log.Fatal(err, "Error starting server")
 	}
