@@ -1,4 +1,6 @@
 
+GOPATH = $(PWD)/.go
+
 GO_COMPILER_OPTS = -a -tags netgo -ldflags '-w -extldflags "-static"'
 
 time="2s"
