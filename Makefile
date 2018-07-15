@@ -110,6 +110,9 @@ curl:
 deps:
 	go get -u github.com/eyedeekay/jumphelper/src
 	go get -u golang.org/x/time/rate
+	go get -u github.com/eyedeekay/gosam
+	go get -u github.com/eyedeekay/i2pasta/convert
+	go get -u golang.org/x/time/rate
 
 follow:
 	docker logs -f jumphelper
