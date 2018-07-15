@@ -52,9 +52,9 @@ func ServiceRequest(c *Client) {
 	}
 	time.Sleep(2 * time.Second)
 	if b, _ := c.Check("fireaxe.i2p"); b {
-		log.Println("Found fireaxe.i2p in addressbook")
+		log.Fatal("Found fireaxe.i2p in addressbook")
 	} else {
-		log.Fatal("Subaddress fireaxe.i2p not found, this is incorrect")
+		log.Println("Subaddress fireaxe.i2p not found, this is incorrect")
 	}
 }
 
