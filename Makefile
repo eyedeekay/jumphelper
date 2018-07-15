@@ -61,6 +61,14 @@ test:
 
 build: server client
 
+noopts:
+	go build \
+		-o bin/jumphelper \
+		./src/server/main.go
+	go build \
+		-o bin/ijh \
+		./src/client/main.go
+
 server:
 	GOOS=linux GOARCH=amd64 go build \
 		$(GO_COMPILER_OPTS) \
