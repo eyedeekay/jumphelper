@@ -5,6 +5,8 @@ GO_COMPILER_OPTS = -a -tags netgo -ldflags '-w -extldflags "-static"'
 
 time="2s"
 
+basic: deps test noopts
+
 lint: gofmt golint govet
 
 t: lint test build
