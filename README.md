@@ -32,3 +32,13 @@ If you want to test it, that's fine, but it's highly experimental.
   setup. This might be useful for services driven by the API, which could change
   destination frequently.
 
+## STRATEGIES:
+
+  * Ephemerality(Optional but default). In the default mode of operation, the
+  helper doesn't allow the applications using it to cache new addresses. Instead,
+  each time it starts, it downloads all the addressbooks it is subscribed to as
+  quickly as possible.
+  * Rate-Limiting(Optional but default). To confuse timebleed-type attacks, the
+  system will use rate-limiting and random delays.
+  * Signed Entries(Optional, non-default)
+  * Peer-Voting(Optional, non-default)

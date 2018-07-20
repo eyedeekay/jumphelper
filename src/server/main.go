@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"log"
+    "strings"
 
 	"github.com/eyedeekay/jumphelper/src"
 )
@@ -10,7 +11,11 @@ import (
 type arrayFlags []string
 
 func (i *arrayFlags) String() string {
-	return "my string representation"
+    var r string
+    for _, s := range *i {
+        r += s + ","
+    }
+	return strings.TrimSuffix(r, ",")
 }
 
 func (i *arrayFlags) Set(value string) error {

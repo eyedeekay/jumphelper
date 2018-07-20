@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
-	"net/http"
+	//"net/http"
 	"net/url"
 	"strings"
 
-	"github.com/eyedeekay/gosam"
-	"github.com/eyedeekay/i2pasta/convert"
+	//"github.com/eyedeekay/gosam"
+	//"github.com/eyedeekay/i2pasta/convert"
 )
 
 // JumpHelper is a struct that prioritizes i2p address sources
@@ -23,13 +23,13 @@ type JumpHelper struct {
 	ext     bool
 	verbose bool
 
-	samBridgeConn *goSam.Client
+	//samBridgeConn *goSam.Client
 
-	tr     *http.Transport
-	client *http.Client
+	//tr     *http.Transport
+	//client *http.Client
 
-	addressBook       []string
-	remoteAddressBook []string
+    addressBook       []string
+	remoteAddressBook []*addresslist
 }
 
 // LoadAddressBook loads an addressbook in csv(name, b32) format
@@ -39,36 +39,6 @@ func (j *JumpHelper) LoadAddressBook() error {
 		return fmt.Errorf(err.Error())
 	}
 	j.addressBook = strings.Split(string(content), "\n")
-	return nil
-}
-
-// SyncRemoteAddressBooks syncs addressbooks from subscription services to the standalone addressbook
-func (j *JumpHelper) SyncRemoteAddressBooks() error {
-	log.Println("Syncing Subscription Contents")
-	for _, suburl := range j.subscriptionURLs {
-		resp, err := j.client.Get(suburl)
-		if err != nil {
-			return err
-		}
-		defer resp.Body.Close()
-		b, e := ioutil.ReadAll(resp.Body)
-		if e != nil {
-			return e
-		}
-		lines := strings.Split(string(b), "\n")
-		for _, l := range lines {
-			kv := strings.SplitN(l, "=", 2)
-			if len(kv) == 2 {
-				i := i2pconv.I2pconv{}
-				s, e := i.I2p64to32(kv[1])
-				if e != nil {
-					return e
-				}
-				j.remoteAddressBook = append(j.remoteAddressBook, kv[0]+","+s)
-			}
-		}
-		log.Println("Subscription Contents Synced from", suburl)
-	}
 	return nil
 }
 
@@ -103,7 +73,8 @@ func (j *JumpHelper) SearchAddressBook(pk string) []string {
 			}
 		}
 	}
-	for _, a := range j.remoteAddressBook {
+	for _, r := range j.remoteAddressBook {
+        for _, a := range r.RemoteAddressBook {
 		r := strings.SplitN(a, ",", 2)
 		if len(r) == 2 {
 			if r[0] == j.trim(k.Host) {
@@ -112,6 +83,7 @@ func (j *JumpHelper) SearchAddressBook(pk string) []string {
 			}
 		}
 	}
+    }
 	return nil
 }
 
@@ -174,28 +146,13 @@ func NewJumpHelperFromOptions(opts ...func(*JumpHelper) error) (*JumpHelper, err
 	}
 	log.Println("Creating a jumphelper")
 	if j.ext {
-		j.samBridgeConn, err = goSam.NewClientFromOptions(
-			goSam.SetHost(j.samHost),
-			goSam.SetPort(j.samPort),
-            goSam.SetInLength(2),
-            goSam.SetOutLength(2),
-			goSam.SetInQuantity(15),
-            goSam.SetInBackups(5),
-			goSam.SetOutQuantity(5),
-            goSam.SetOutBackups(5),
-			goSam.SetUnpublished(true),
-		)
-		if err != nil {
-			return nil, err
-		}
-		j.tr = &http.Transport{
-			Dial: j.samBridgeConn.Dial,
-		}
-		j.client = &http.Client{Transport: j.tr}
-		err := j.SyncRemoteAddressBooks()
-		if err != nil {
-			return nil, err
-		}
+		for _, u := range j.subscriptionURLs {
+            nab, e := newAddressList(u, j.samHost, j.samPort)
+            if e !=nil {
+                return nil, e
+            }
+            j.remoteAddressBook = append(j.remoteAddressBook, nab)
+        }
 	}
 	return &j, err
 }
@@ -212,6 +169,6 @@ func (j *JumpHelper) printKvs(kv []string) {
 func (j *JumpHelper) Subs() []string {
     var r []string
     r = append(r, j.addressBook...)
-    r = append(r, j.remoteAddressBook...)
+    //r = append(r, j.remoteAddressBook...)
 	return r
 }
