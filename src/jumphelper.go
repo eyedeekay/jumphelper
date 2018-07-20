@@ -4,13 +4,12 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
-	//"net/http"
 	"net/url"
 	"strings"
 
-	//"github.com/eyedeekay/gosam"
-	//"github.com/eyedeekay/i2pasta/convert"
+    "github.com/eyedeekay/i2pasta/convert"
 )
+
 
 // JumpHelper is a struct that prioritizes i2p address sources
 type JumpHelper struct {
@@ -23,12 +22,7 @@ type JumpHelper struct {
 	ext     bool
 	verbose bool
 
-	//samBridgeConn *goSam.Client
-
-	//tr     *http.Transport
-	//client *http.Client
-
-    addressBook       []string
+	addressBook       []string
 	remoteAddressBook []*addresslist
 }
 
@@ -74,16 +68,22 @@ func (j *JumpHelper) SearchAddressBook(pk string) []string {
 		}
 	}
 	for _, r := range j.remoteAddressBook {
-        for _, a := range r.RemoteAddressBook {
-		r := strings.SplitN(a, ",", 2)
-		if len(r) == 2 {
-			if r[0] == j.trim(k.Host) {
-				j.printKvs(r)
-				return r
+		for _, a := range r.RemoteAddressBook {
+			r := strings.SplitN(a, ",", 2)
+			if len(r) == 2 {
+				if r[0] == j.trim(k.Host) {
+					j.printKvs(r)
+                    i := i2pconv.I2pconv{}
+                    s, e := i.I2p64to32(r[1])
+                    if e != nil {
+                        return nil
+                    }
+                    v := []string{r[0], s}
+					return v
+				}
 			}
 		}
 	}
-    }
 	return nil
 }
 
@@ -147,12 +147,12 @@ func NewJumpHelperFromOptions(opts ...func(*JumpHelper) error) (*JumpHelper, err
 	log.Println("Creating a jumphelper")
 	if j.ext {
 		for _, u := range j.subscriptionURLs {
-            nab, e := newAddressList(u, j.samHost, j.samPort)
-            if e !=nil {
-                return nil, e
-            }
-            j.remoteAddressBook = append(j.remoteAddressBook, nab)
-        }
+			nab, e := newAddressList(u, j.samHost, j.samPort)
+			if e != nil {
+				return nil, e
+			}
+			j.remoteAddressBook = append(j.remoteAddressBook, nab)
+		}
 	}
 	return &j, err
 }
@@ -167,8 +167,10 @@ func (j *JumpHelper) printKvs(kv []string) {
 
 // Subs Lists all the known address pairs
 func (j *JumpHelper) Subs() []string {
-    var r []string
-    r = append(r, j.addressBook...)
-    //r = append(r, j.remoteAddressBook...)
+	var r []string
+	r = append(r, j.addressBook...)
+	for _, x := range j.remoteAddressBook {
+		r = append(r, x.RemoteAddressBook...)
+	}
 	return r
 }
