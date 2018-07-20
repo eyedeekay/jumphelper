@@ -8,6 +8,14 @@ import (
 // addresslistOption is a addresslist option
 type addresslistOption func(*addresslist) error
 
+//SetaddresslistAddressBookPath sets the host of the addresslist client's SAM bridge
+func SetaddresslistAddressBookPath(s string) func(*addresslist) error {
+	return func(c *addresslist) error {
+		c.addressBookURL = s
+		return nil
+	}
+}
+
 //SetaddresslistHost sets the host of the addresslist client's SAM bridge
 func SetaddresslistHost(s string) func(*addresslist) error {
 	return func(c *addresslist) error {

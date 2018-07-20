@@ -1,11 +1,9 @@
 package jumphelper
 
 import (
-	//"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
-	//"net/url"
 	"strings"
 
 	"github.com/eyedeekay/gosam"
@@ -20,9 +18,7 @@ type addresslist struct {
 
 	tr     *http.Transport
 	client *http.Client
-	//Stores comma-separated name,b32 values
-	//addressBook       []string
-	//Stores comma-separated name,b64 values
+
 	RemoteAddressBook []string
 }
 
@@ -42,11 +38,6 @@ func (a *addresslist) SyncRemoteAddressBooks() error {
 	for _, l := range lines {
 		kv := strings.SplitN(l, "=", 2)
 		if len(kv) == 2 {
-			//i := i2pconv.I2pconv{}
-			//s, e := i.I2p64to32(kv[1])
-			//if e != nil {
-			//return e
-			//}
 			a.RemoteAddressBook = append(a.RemoteAddressBook, kv[0]+","+kv[1])
 		}
 	}
