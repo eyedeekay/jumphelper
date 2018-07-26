@@ -3,94 +3,12 @@ package jumphelper
 import (
 	"fmt"
 	"log"
-    "net"
 	"net/http"
 	"strings"
+    "time"
 
 	"golang.org/x/time/rate"
-	"time"
 )
-
-import (
-	"github.com/kpetku/sam3"
-)
-
-type SamResponseWriter struct {
-	Sam    *sam3.SAM
-	Keys   sam3.I2PKeys
-	Stream *sam3.StreamSession
-	Listen *sam3.StreamListener
-	Conn   net.Conn
-    Head http.Header
-
-	size   int
-	status int
-	http.ResponseWriter
-}
-
-// Header returns & satisfies the http.ResponseWriter interface
-func (w *SamResponseWriter) Header() http.Header {
-	return w.Head
-}
-
-// Write satisfies the http.ResponseWriter interface and
-// captures data written, in bytes
-func (w *SamResponseWriter) Write(data []byte) (int, error) {
-
-	written, err := w.Conn.Write(data)
-	w.size += written
-
-	return written, err
-}
-
-func (w *SamResponseWriter) Base32() string {
-	return w.Keys.Addr().Base32()
-}
-
-// WriteHeader satisfies the http.ResponseWriter interface and
-// allows us to cach the status code
-func (w *SamResponseWriter) WriteHeader(statusCode int) {
-
-	w.status = statusCode
-    w.Head.Add("Status-Code", http.StatusText(w.status))
-    http.Error(w, http.StatusText(w.status), w.status)
-}
-
-func (w *SamResponseWriter) Options() []string {
-	rtcOptions := []string{
-		"inbound.length=0", "outbound.length=0",
-		"inbound.allowZeroHop=true", "outbound.allowZeroHop=true",
-		"inbound.lengthVariance=0", "outbound.lengthVariance=0",
-		"inbound.backupQuantity=4", "outbound.backupQuantity=4",
-		"inbound.quantity=15", "outbound.quantity=15",
-		"i2cp.reduceIdleTime=300000", "i2cp.reduceOnIdle=true", "i2cp.reduceQuantity=4",
-		"i2cp.closeIdleTime=1200000", "i2cp.closeOnIdle=true",
-		"i2cp.dontPublishLeaseSet=false", "i2cp.encryptLeaseSet=true",
-	}
-	return rtcOptions
-}
-
-func NewSamResponseWriter(samHost, samPort string) (*SamResponseWriter, error) {
-	var w SamResponseWriter
-	var err error
-	if w.Sam, err = sam3.NewSAM(samHost + ":" + samPort); err != nil {
-		return nil, err
-	}
-	if w.Keys, err = w.Sam.NewKeys(); err != nil {
-		return nil, err
-	}
-	if w.Stream, err = w.Sam.NewStreamSession("jumphelper", w.Keys, w.Options()); err != nil {
-		return nil, err
-	}
-	if w.Listen, err = w.Stream.Listen(); err != nil {
-		return nil, err
-	}
-    if a, err := w.Listen.Accept(); err == nil {
-        w.Conn = a //.(sam3.SAMConn)
-        return &w, nil
-    }
-    return nil, fmt.Errorf("")
-}
 
 // Server is a TCP service that responds to addressbook requests
 type Server struct {
@@ -106,7 +24,7 @@ type Server struct {
 	verbose          bool
 	subscriptionURLs []string
 	listing          bool
-	s                *SamResponseWriter
+	//s                *SamResponseWriter
 
 	rate  int
 	burst int
@@ -130,8 +48,8 @@ func (s *Server) limit(next http.Handler) http.Handler {
 	})
 }
 
-// Serve sets up a listening server on the specified port
-func (s *Server) Serve() {
+// ServeLocal sets up a listening server on the specified port
+func (s *Server) ServeLocal() {
 	s.localService, s.err = s.NewMux()
 	if s.err != nil {
 		log.Fatal(s.err)
@@ -140,6 +58,18 @@ func (s *Server) Serve() {
 	if s.err != nil {
 		log.Fatal(s.err)
 	}
+}
+
+// ServeI2p sets up a listening server on the specified port
+func (s *Server) ServeI2p() {
+	/*
+
+	 */
+}
+
+// ServeLocal sets up a listening server on the specified port
+func (s *Server) Serve() {
+	s.ServeLocal()
 }
 
 // HandleExists prints true:address if an antecedent URL exists in the addressbook, false if not
@@ -171,13 +101,6 @@ func (s *Server) HandleJump(w http.ResponseWriter, r *http.Request) {
 func (s *Server) HandleLookup(w http.ResponseWriter, r *http.Request) {
 	p := strings.TrimPrefix(strings.Replace(r.URL.Path, "jump/", "", 1), "/")
 	if s.jumpHelper.SearchAddressBook(p) != nil {
-		if r.Header.Get("X-I2p-Destb32") != "" {
-			line := "http://" + s.s.Base32() + "/?i2paddresshelper=" + s.jumpHelper.SearchAddressBook(p)[2]
-			s.s.Header().Set("Location", line)
-			s.s.WriteHeader(301)
-			fmt.Fprintln(s.s, line)
-			return
-		}
 		line := "http://" + s.host + "/?i2paddresshelper=" + s.jumpHelper.SearchAddressBook(p)[2]
 		w.Header().Set("Location", line)
 		w.WriteHeader(301)
@@ -271,6 +194,7 @@ func NewServerFromOptions(opts ...func(*Server) error) (*Server, error) {
 	if s.err != nil {
 		return nil, fmt.Errorf("Jump helper load error: %s", s.err)
 	}
+
 	return &s, s.err
 }
 
