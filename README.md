@@ -13,24 +13,24 @@ If you want to test it, that's fine, but it's highly experimental.
 
   * Make it more difficult for an eepSite with embedded resources from remote
   sites to reliably determine the long-term contents of a user's address book
-  by rate-limiting requests to the local addressbook.
+  by rate-limiting requests to the local addressbook.(Works)
   * Make it easier for third-party, non-core i2p applications to create their
   own, per-application address books. This will allow them to construct address
   books based on what they need to contain and configure per-application how
-  the addressbook should work.
+  the addressbook should work.(Arguable, but possible)
   * Obviate my earlier project [*thirdeye*](https://github.com/eyedeekay/thirdeye)
   by implementing a simpler AddressHelper service(than thirdeye) that can be
-  forwarded over i2p and treated like an AddressHelper.
+  forwarded over i2p and treated like an AddressHelper.(Incomplete)
 
 ### Feature Goals
 
   * Allow the users to configure multiple "master" AddressHelpers, and create
   a way to arrive at a "consensus" based on what they report and longitudinal
-  data.
+  data.(Barely started)
   * Enable automatic **signed** updates using public keys to authenticate
   accounts associated with desired hostnames to create a "Dynamic DNS" type
   setup. This might be useful for services driven by the API, which could change
-  destination frequently.
+  destination frequently.(Not started)
 
 ## STRATEGIES:
 

@@ -77,7 +77,7 @@ func (j *JumpHelper) SearchAddressBook(pk string) []string {
 					if e != nil {
 						return nil
 					}
-					v := []string{r[0], s}
+					v := []string{r[0], s, r[1]}
 					return v
 				}
 			}

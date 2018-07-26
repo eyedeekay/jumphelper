@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 	"log"
-    "strings"
+	"strings"
 
 	"github.com/eyedeekay/jumphelper/src"
 )
@@ -11,10 +11,10 @@ import (
 type arrayFlags []string
 
 func (i *arrayFlags) String() string {
-    var r string
-    for _, s := range *i {
-        r += s + ","
-    }
+	var r string
+	for _, s := range *i {
+		r += s + ","
+	}
 	return strings.TrimSuffix(r, ",")
 }
 
@@ -44,8 +44,8 @@ func main() {
 	}
 
 	s, err := jumphelper.NewServer(*host, *port, *book, *samhost, *samport,
-        subscriptions,
-        *useremote, *verbose, *share)
+		subscriptions,
+		*useremote, *verbose, *share)
 	if err != nil {
 		log.Fatal(err, "Error starting server")
 	}
