@@ -119,6 +119,7 @@ curl:
 
 deps:
 	go get -u github.com/eyedeekay/jumphelper/src
+	go get -u github.com/eyedeekay/sam-forwarder
 	go get -u golang.org/x/time/rate
 	go get -u github.com/eyedeekay/gosam
 	go get -u github.com/kpetku/sam3
