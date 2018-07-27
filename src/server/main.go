@@ -47,7 +47,7 @@ func main() {
 	if len(subscriptions) < 1 {
 		subscriptions = append(subscriptions, "http://joajgazyztfssty4w2on5oaqksz6tqoxbduy553y34mf4byv6gpq.b32.i2p/export/alive-hosts.txt")
 	}
-    var forwarder *samfrowarder.SAMForwarder
+    var forwarder *samforwarder.SAMForwarder
     var err error
     if *forward {
         if forwarder, err = samforwarder.NewSAMForwarderFromOptions(
@@ -55,7 +55,7 @@ func main() {
             samforwarder.SetPort(*port),
             samforwarder.SetSAMHost(*samhost),
             samforwarder.SetSAMPort(*samport),
-            samforwarder.SetTunName(*tunname),
+            samforwarder.SetName(*tunname),
         ); err == nil {
             go forwarder.Serve()
         }else{
