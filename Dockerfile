@@ -6,7 +6,7 @@ COPY . /opt/work
 WORKDIR /opt/work
 RUN go get -u github.com/eyedeekay/jumphelper/src
 RUN go get -u golang.org/x/time/rate
-RUN make server
+RUN make deps server
 COPY misc/addresses.csv /var/lib/i2pd/addressbook/addresses.csv
 RUN chown i2pd:i2pd /var/lib/i2pd/addressbook/addresses.csv
 USER i2pd

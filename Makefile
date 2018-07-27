@@ -13,7 +13,9 @@ t: lint test build
 
 d: docker docker-run
 
-docker: docker-host
+docker: docker-host docker-build
+
+docker-build:
 	docker build -f Dockerfile -t eyedeekay/jumphelper .
 
 docker-network:
@@ -30,7 +32,6 @@ docker-host: docker-network
 		--restart always \
 		--ip 172.81.81.2 \
 		-p :4567 \
-		-p 127.0.0.1:7073:7073 \
 		--volume jumphelper-sam-host:/var/lib/i2pd:rw \
 		-t eyedeekay/sam-host; true
 
