@@ -1,6 +1,8 @@
 
 GOPATH = $(PWD)/.go
 
+i2pd_dat?=i2pd_dat
+
 GO_COMPILER_OPTS = -a -tags netgo -ldflags '-w -extldflags "-static"'
 
 time="2s"
@@ -22,17 +24,18 @@ docker-network:
 	docker network create --subnet 172.81.81.0/29 jumphelper; true
 
 docker-host: docker-network
-	docker run \
-		-d \
+	docker run -d \
 		--name sam-host \
 		--network si \
 		--network-alias sam-host \
 		--hostname sam-host \
-		--link jumphelper \
+		--link si-proxy \
 		--restart always \
-		--ip 172.81.81.2 \
+		--ip 172.80.80.2 \
 		-p :4567 \
-		--volume sam-host:/var/lib/i2pd:rw \
+		-p 127.0.0.1:7073:7073 \
+		-p 127.0.0.1:7656:7656 \
+		--volume $(i2pd_dat):/var/lib/i2pd:rw \
 		-t eyedeekay/sam-host; true
 
 docker-run: docker-network
