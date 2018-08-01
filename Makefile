@@ -50,6 +50,7 @@ docker-run: docker-network
 		--link sam-host \
 		--restart always \
 		--ip 172.80.80.3 \
+		-p 127.0.0.1:7854:7854 \
 		-t eyedeekay/sam-jumphelper; true
 
 docker-clean:
