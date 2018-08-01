@@ -60,13 +60,6 @@ func (s *Server) ServeLocal() {
 	}
 }
 
-// ServeI2p sets up a listening server on the specified port
-func (s *Server) ServeI2p() {
-	/*
-
-	 */
-}
-
 // ServeLocal sets up a listening server on the specified port
 func (s *Server) Serve() {
 	s.ServeLocal()

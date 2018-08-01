@@ -6,8 +6,6 @@ import (
 	"log"
 	"net/url"
 	"strings"
-
-	"github.com/eyedeekay/i2pasta/convert"
 )
 
 // JumpHelper is a struct that prioritizes i2p address sources
@@ -67,21 +65,10 @@ func (j *JumpHelper) SearchAddressBook(pk string) []string {
 		}
 	}
 	for _, r := range j.remoteAddressBook {
-		for _, a := range r.RemoteAddressBook {
-			r := strings.SplitN(a, ",", 2)
-			if len(r) == 2 {
-				if r[0] == j.trim(k.Host) {
-					j.printKvs(r)
-					i := i2pconv.I2pconv{}
-					s, e := i.I2p64to32(r[1])
-					if e != nil {
-						return nil
-					}
-					v := []string{r[0], s, r[1]}
-					return v
-				}
-			}
-		}
+        result := r.SearchAddressList(j.trim(k.Host))
+        if result != nil {
+            return result
+        }
 	}
 	return nil
 }

@@ -7,12 +7,14 @@ import (
 	"strings"
 
 	"github.com/eyedeekay/gosam"
+    "github.com/eyedeekay/i2pasta/convert"
 )
 
 type addresslist struct {
 	addressBookURL string
 	samHost        string
 	samPort        string
+    Lock           bool
 
 	samBridgeConn *goSam.Client
 
@@ -42,7 +44,38 @@ func (a *addresslist) SyncRemoteAddressBooks() error {
 		}
 	}
 	log.Println("Subscription Contents Synced from", a.addressBookURL)
+    a.Lock = false
 	return nil
+}
+
+func (a *addresslist) trim(k string) string {
+	r := strings.Replace(k, "http://", "", -1)
+	if strings.HasSuffix(k, ".i2p") {
+		return r
+	}
+	r = strings.SplitN(r, ".i2p", -1)[0]
+	return strings.TrimSpace(strings.TrimSuffix(r, "/"))
+}
+
+func (a *addresslist) SearchAddressList(host string) []string {
+    if a.Lock == false {
+        for _, addresspair := range a.RemoteAddressBook {
+            r := strings.SplitN(addresspair, ",", 2)
+            if len(r) == 2 {
+                if r[0] == a.trim(host) {
+                    //j.printKvs(r)
+                    i := i2pconv.I2pconv{}
+                    s, e := i.I2p64to32(r[1])
+                    if e != nil {
+                        return nil
+                    }
+                    v := []string{r[0], s, r[1]}
+                    return v
+                }
+            }
+        }
+    }
+    return nil
 }
 
 func newAddressList(u, samhost, samport string) (*addresslist, error) {
@@ -51,6 +84,7 @@ func newAddressList(u, samhost, samport string) (*addresslist, error) {
 	a.samHost = samhost
 	a.samPort = samport
 	a.addressBookURL = u
+    a.Lock = true
 	a.samBridgeConn, err = goSam.NewClientFromOptions(
 		goSam.SetHost(a.samHost),
 		goSam.SetPort(a.samPort),

@@ -24,15 +24,15 @@ docker-network:
 docker-host: docker-network
 	docker run \
 		-d \
-		--name jumphelper-sam-host \
-		--network jumphelper \
-		--network-alias jumphelper-sam-host \
-		--hostname jumphelper-sam-host \
+		--name sam-host \
+		--network si \
+		--network-alias sam-host \
+		--hostname sam-host \
 		--link jumphelper \
 		--restart always \
 		--ip 172.81.81.2 \
 		-p :4567 \
-		--volume jumphelper-sam-host:/var/lib/i2pd:rw \
+		--volume sam-host:/var/lib/i2pd:rw \
 		-t eyedeekay/sam-host; true
 
 docker-run: docker-network
@@ -40,10 +40,10 @@ docker-run: docker-network
 	docker run \
 		-d \
 		--name jumphelper \
-		--network jumphelper \
+		--network si \
 		--network-alias jumphelper \
 		--hostname jumphelper \
-		--link jumphelper-sam-host \
+		--link sam-host \
 		--restart always \
 		--ip 172.81.81.3 \
 		-p 127.0.0.1:7054:7054 \
@@ -136,5 +136,3 @@ diff:
 start:
 	while true; do make docker docker-run follow; done
 
-stop:
-	docker rm -f jumphelper; true
