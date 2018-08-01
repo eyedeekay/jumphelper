@@ -24,6 +24,7 @@ If you want to test it, that's fine, but it's highly experimental.
 
 ### Feature Goals
 
+  * Optional DNS-like server.(Not started)
   * Allow the users to configure multiple "master" AddressHelpers, and create
   a way to arrive at a "consensus" based on what they report and longitudinal
   data.(Barely started)

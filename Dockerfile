@@ -12,7 +12,7 @@ RUN chown i2pd:i2pd /var/lib/i2pd/addressbook/addresses.csv
 USER i2pd
 CMD ./bin/jumphelper -hostfile=/var/lib/i2pd/addressbook/addresses.csv \
     -host="0.0.0.0" \
-    -port="7054" \
+    -port="7854" \
     -samhost=sam-host \
     -samport="7656" \
     -subs="http://joajgazyztfssty4w2on5oaqksz6tqoxbduy553y34mf4byv6gpq.b32.i2p/export/alive-hosts.txt" \
