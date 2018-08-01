@@ -10,7 +10,7 @@ import (
 
 func main() {
 	host := flag.String("host", "127.0.0.1", "Host address to listen on.")
-	port := flag.String("port", "7054", "Port to listen on.")
+	port := flag.String("port", "7854", "Port to listen on.")
 	url := flag.String("url", "false", "URL to check.")
 	addr := flag.Bool("addr", false, "Show base32 URL?.")
 	verbose := flag.Bool("verbose", false, "Verbose?.")

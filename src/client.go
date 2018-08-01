@@ -83,7 +83,7 @@ func NewClientFromOptions(opts ...func(*Client) error) (*Client, error) {
 		},
 	}
 	c.host = "127.0.0.1"
-	c.port = "7054"
+	c.port = "7854"
 	c.verbose = false
 	for _, o := range opts {
 		if err := o(&c); err != nil {

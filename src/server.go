@@ -157,9 +157,9 @@ func NewServer(host, port, book, samhost, samport string, subs []string, useh, v
 func NewServerFromOptions(opts ...func(*Server) error) (*Server, error) {
 	var s Server
 	s.host = "127.0.0.1"
-	s.port = "7054"
+	s.port = "7854"
 	s.samHost = "127.0.0.1"
-	s.samPort = "7056"
+	s.samPort = "7656"
 	s.addressBookPath = "/var/lib/i2pd/addressbook/addresses.csv"
 	s.rate = 1
 	s.burst = 1
@@ -220,7 +220,7 @@ func NewService(host, port, book, samhost, samport string, subs []string, useh b
 func service() {
 	s, err := NewServerFromOptions(
 		SetServerHost("0.0.0.0"),
-		SetServerPort("7054"),
+		SetServerPort("7854"),
 		SetServerAddressBookPath("../addresses.csv"),
 		SetServerRate(1000),
 		SetServerBurst(1000),

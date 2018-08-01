@@ -30,7 +30,7 @@ func main() {
 	log.Println("Starting server:")
 	var subscriptions arrayFlags
 	host := flag.String("host", "127.0.0.1", "Host address to listen on.")
-	port := flag.String("port", "7054", "Port to listen on.")
+	port := flag.String("port", "7854", "Port to listen on.")
 	samhost := flag.String("samhost", "127.0.0.1", "Host connect to SAM on.")
 	samport := flag.String("samport", "7656", "SAM port.")
 	book := flag.String("hostfile", "./addresses.csv", "Local address book.")

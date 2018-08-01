@@ -112,14 +112,14 @@ echo:
 	ijh -url="fireaxe.i2p"
 
 forum:
-	./bin/ijh -url="forum.i2p/" -port="7054" -addr=true
+	./bin/ijh -url="forum.i2p/" -port="7854" -addr=true
 
 doecho:
 	while true; do make echo; done
 
 curl:
-	/usr/bin/curl -l 127.0.0.1:7054/check/i2p-projekt.i2p
-	/usr/bin/curl -l 127.0.0.1:7054/i2p-projekt.i2p
+	/usr/bin/curl -l 127.0.0.1:7854/check/i2p-projekt.i2p
+	/usr/bin/curl -l 127.0.0.1:7854/i2p-projekt.i2p
 
 deps:
 	go get -u github.com/eyedeekay/jumphelper/src
