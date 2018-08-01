@@ -21,7 +21,7 @@ docker-build:
 	docker build -f Dockerfile -t eyedeekay/jumphelper .
 
 docker-network:
-	docker network create --subnet 172.81.81.0/29 jumphelper; true
+	docker network create --subnet 172.80.80.0/24 jumphelper; true
 
 docker-host: docker-network
 	docker run -d \
@@ -39,18 +39,18 @@ docker-host: docker-network
 		-t eyedeekay/sam-host; true
 
 docker-run: docker-network
-	docker rm -f jumphelper; true
+	docker rm -f sam-jumphelper; true
 	docker run \
 		-d \
-		--name jumphelper \
+		--name sam-jumphelper \
 		--network si \
-		--network-alias jumphelper \
-		--hostname jumphelper \
+		--network-alias sam-jumphelper \
+		--hostname sam-jumphelper \
+		--link si-proxy \
 		--link sam-host \
 		--restart always \
-		--ip 172.81.81.3 \
-		-p 127.0.0.1:7054:7054 \
-		-t eyedeekay/jumphelper
+		--ip 172.80.80.3 \
+		-t eyedeekay/sam-jumphelper; true
 
 docker-clean:
 	docker rm -f jumphelper; true
