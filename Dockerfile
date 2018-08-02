@@ -8,8 +8,9 @@ RUN go get -u github.com/eyedeekay/jumphelper/src
 RUN go get -u golang.org/x/time/rate
 RUN make deps server
 COPY misc/addresses.csv /var/lib/i2pd/addressbook/addresses.csv
-RUN chown i2pd:i2pd /var/lib/i2pd/addressbook/addresses.csv
+RUN chown -R i2pd:i2pd /var/lib/i2pd/addressbook/addresses.csv /opt/work
 USER i2pd
+VOLUME /opt/work
 CMD ./bin/jumphelper -host="0.0.0.0" \
     -share=true \
     -i2p=true \
