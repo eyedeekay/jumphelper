@@ -94,11 +94,16 @@ func (s *Server) HandleJump(w http.ResponseWriter, r *http.Request) {
 func (s *Server) HandleLookup(w http.ResponseWriter, r *http.Request) {
 	p := strings.TrimPrefix(strings.Replace(r.URL.Path, "jump/", "", 1), "/")
 	if s.jumpHelper.SearchAddressBook(p) != nil {
-		line := "http://" + s.host + "/?i2paddresshelper=" + s.jumpHelper.SearchAddressBook(p)[2]
-		w.Header().Set("Location", line)
-		w.WriteHeader(301)
-		fmt.Fprintln(w, line)
-		return
+        array := s.jumpHelper.SearchAddressBook(p)
+        if len(array) == 3 {
+            line := "http://" + s.host + "/?i2paddresshelper=" + array[2]
+            w.Header().Set("Location", line)
+            w.WriteHeader(301)
+            fmt.Fprintln(w, line)
+            return
+        }
+            fmt.Fprintln(w, "no, it's me, dave, man.")
+        return
 	}
 	fmt.Fprintln(w, "FALSE")
 	return
