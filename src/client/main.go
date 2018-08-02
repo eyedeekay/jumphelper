@@ -13,6 +13,7 @@ func main() {
 	port := flag.String("port", "7854", "Port to listen on.")
 	url := flag.String("url", "false", "URL to check.")
 	addr := flag.Bool("addr", false, "Show base32 URL?.")
+    addr64 := flag.Bool("addr64", false, "Show base32 URL?.")
 	verbose := flag.Bool("verbose", false, "Verbose?.")
 	flag.Parse()
 

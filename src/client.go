@@ -69,6 +69,20 @@ func (c *Client) Request(s string) (string, error) {
 	return string(bytes), nil
 }
 
+// Jump writes a request for a base64 address to a jumphelper server
+func (c *Client) Jump(s string) (string, error) {
+	resp, err := c.client.Get(c.address(s, "jump"))
+	if err != nil {
+		return "", err
+	}
+	defer resp.Body.Close()
+	bytes, err := ioutil.ReadAll(resp.Body)
+	c.Log(resp.Header.Get("Location"))
+	if err != nil {
+		return "", err
+	}
+	return string(bytes), nil
+}
 // NewClient creates a new jumphelper client
 func NewClient(Host, Port string, verbose bool) (*Client, error) {
 	return NewClientFromOptions(SetClientHost(Host), SetClientPort(Port), SetClientVerbose(verbose))

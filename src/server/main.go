@@ -56,8 +56,20 @@ func main() {
             samforwarder.SetSAMHost(*samhost),
             samforwarder.SetSAMPort(*samport),
             samforwarder.SetName(*tunname),
+            samforwarder.SetSaveFile(true),
+            samforwarder.SetInLength(3),
+            samforwarder.SetOutLength(3),
+            samforwarder.SetInQuantity(15),
+            samforwarder.SetOutQuantity(15),
+            samforwarder.SetInBackups(5),
+            samforwarder.SetOutBackups(5),
+            samforwarder.SetReduceIdle(true),
+            samforwarder.SetReduceIdleTime(30),
+            samforwarder.SetReduceIdleQuantity(5),
+            samforwarder.SetCompress(true),
         ); err == nil {
             go forwarder.Serve()
+            log.Println("Service available on:", forwarder.Base32())
         }else{
             log.Fatal(err, "Error starting forwarder")
         }
