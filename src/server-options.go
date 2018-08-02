@@ -16,6 +16,14 @@ func SetServerAddressBookPath(s string) func(*Server) error {
 	}
 }
 
+//SetServerBase32 sets the host of the Server client's SAM bridge
+func SetServerBase32(s string) func(*Server) error {
+	return func(c *Server) error {
+		c.base32 = s
+		return nil
+	}
+}
+
 //SetServerHost sets the host of the Server client's SAM bridge
 func SetServerHost(s string) func(*Server) error {
 	return func(c *Server) error {

@@ -77,7 +77,7 @@ func main() {
 
 	s, err := jumphelper.NewServer(*host, *port, *book, *samhost, *samport,
 		subscriptions,
-		*useremote, *verbose, *share)
+		*useremote, *verbose, *share, forwarder.Base32())
 	if err != nil {
 		log.Fatal(err, "Error starting server")
 	}

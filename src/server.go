@@ -24,7 +24,9 @@ type Server struct {
 	verbose          bool
 	subscriptionURLs []string
 	listing          bool
+    base32           string
 	//s                *SamResponseWriter
+
 
 	rate  int
 	burst int
@@ -121,6 +123,16 @@ func (s *Server) HandleListing(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
+// HandleBase32 lists all synced remote jumphelper urls.
+func (s *Server) HandleBase32(w http.ResponseWriter, r *http.Request) {
+	if s.listing {
+        fmt.Fprintln(w, s.base32)
+		return
+	}
+	fmt.Fprintln(w, "Listings disabled for this server")
+	return
+}
+
 // NewMux sets up a new ServeMux with handlers
 func (s *Server) NewMux() (*http.ServeMux, error) {
 	s.localService = http.NewServeMux()
@@ -128,6 +140,7 @@ func (s *Server) NewMux() (*http.ServeMux, error) {
 	s.localService.HandleFunc("/request/", s.HandleJump)
 	s.localService.HandleFunc("/jump/", s.HandleLookup)
 	s.localService.HandleFunc("/sub/", s.HandleListing)
+    s.localService.HandleFunc("/addr/", s.HandleBase32)
 	s.localService.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintln(w, "Dave's not here man.")
 	})
@@ -144,7 +157,7 @@ func (s *Server) Rate() rate.Limit {
 }
 
 // NewServer creates a new Server that answers jump-related queries
-func NewServer(host, port, book, samhost, samport string, subs []string, useh, verbose, share bool) (*Server, error) {
+func NewServer(host, port, book, samhost, samport string, subs []string, useh, verbose, share bool, base32 string) (*Server, error) {
 	return NewServerFromOptions(
 		SetServerHost(host),
 		SetServerPort(port),
@@ -155,6 +168,7 @@ func NewServer(host, port, book, samhost, samport string, subs []string, useh, v
 		SetServerSubscription(subs),
 		SetServerJumpHelperVerbosity(verbose),
 		SetServerEnableListing(share),
+        SetServerBase32(base32),
 	)
 }
 
@@ -171,6 +185,7 @@ func NewServerFromOptions(opts ...func(*Server) error) (*Server, error) {
 	s.ext = true
 	s.verbose = false
 	s.listing = false
+    s.base32 = ""
 	s.subscriptionURLs = []string{"http://joajgazyztfssty4w2on5oaqksz6tqoxbduy553y34mf4byv6gpq.b32.i2p/export/alive-hosts.txt"}
 	for _, o := range opts {
 		if err := o(&s); err != nil {
