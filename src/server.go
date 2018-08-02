@@ -102,7 +102,7 @@ func (s *Server) HandleLookup(w http.ResponseWriter, r *http.Request) {
             fmt.Fprintln(w, line)
             return
         }
-            fmt.Fprintln(w, "no, it's me, dave, man.")
+            fmt.Fprintln(w, "no, it's me, dave, man. let me up")
         return
 	}
 	fmt.Fprintln(w, "FALSE")
