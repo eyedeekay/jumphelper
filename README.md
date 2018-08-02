@@ -13,7 +13,8 @@ If you want to test it, that's fine, but it's highly experimental.
 
   * Make it more difficult for an eepSite with embedded resources from remote
   sites to reliably determine the long-term contents of a user's address book
-  by rate-limiting requests to the local addressbook.(Works)
+  by rate-limiting requests to the local addressbook.(Works, but I don't know
+  what to do about the defaults.)
   * Make it easier for third-party, non-core i2p applications to create their
   own, per-application address books. This will allow them to construct address
   books based on what they need to contain and configure per-application how

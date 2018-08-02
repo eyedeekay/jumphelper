@@ -10,10 +10,12 @@ RUN make deps server
 COPY misc/addresses.csv /var/lib/i2pd/addressbook/addresses.csv
 RUN chown i2pd:i2pd /var/lib/i2pd/addressbook/addresses.csv
 USER i2pd
-CMD ./bin/jumphelper -hostfile=/var/lib/i2pd/addressbook/addresses.csv \
-    -host="0.0.0.0" \
+CMD ./bin/jumphelper -host="0.0.0.0" \
+    -share=true \
+    -i2p=true \
+    -tunname="sam-jumpkelper" \
     -port="7854" \
     -samhost=sam-host \
     -samport="7656" \
-    -subs="http://joajgazyztfssty4w2on5oaqksz6tqoxbduy553y34mf4byv6gpq.b32.i2p/export/alive-hosts.txt" \
-    -verbose=true
+    -hostfile=/var/lib/i2pd/addressbook/addresses.csv \
+    -subs "http://joajgazyztfssty4w2on5oaqksz6tqoxbduy553y34mf4byv6gpq.b32.i2p/export/alive-hosts.txt"
