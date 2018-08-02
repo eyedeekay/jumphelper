@@ -25,15 +25,19 @@ type addresslist struct {
 }
 
 // SyncRemoteAddressBooks syncs addressbooks from subscription services to the standalone addressbook
-func (a *addresslist) SyncRemoteAddressBooks() error {
+func (a *addresslist) SyncRemoteAddressBooks(x *error) error {
 	log.Println("Syncing Subscription Contents")
 	resp, err := a.client.Get(a.addressBookURL)
 	if err != nil {
+        a.Lock = true
+        log.Printf(err.Error())
 		return err
 	}
 	defer resp.Body.Close()
 	b, e := ioutil.ReadAll(resp.Body)
 	if e != nil {
+        a.Lock = true
+        log.Printf(e.Error())
 		return e
 	}
 	lines := strings.Split(string(b), "\n")
@@ -103,9 +107,6 @@ func newAddressList(u, samhost, samport string) (*addresslist, error) {
 		Dial: a.samBridgeConn.Dial,
 	}
 	a.client = &http.Client{Transport: a.tr}
-	err = a.SyncRemoteAddressBooks()
-	if err != nil {
-		return nil, err
-	}
+    go a.SyncRemoteAddressBooks(&err)
 	return &a, nil
 }

@@ -21,7 +21,12 @@ If you want to test it, that's fine, but it's highly experimental.
   the addressbook should work.(Arguable, but possible)
   * Obviate my earlier project [*thirdeye*](https://github.com/eyedeekay/thirdeye)
   by implementing a simpler AddressHelper service(than thirdeye) that can be
-  forwarded over i2p and treated like an AddressHelper.(Incomplete)
+  forwarded over i2p and treated like an AddressHelper.(Complete, as much as
+  I want it to be anyway, but with an arguable bug where if it's asked for an
+  address in it's local addressbook, it will assume that the address is present
+  in the asker's local addressbook too. Since the default addressbook is just
+  the one that comes with i2pd, this issue may be more-or-less invisible for
+  now. See also "Non-Goals")
 
 ### Feature Goals
 
@@ -44,3 +49,10 @@ If you want to test it, that's fine, but it's highly experimental.
   system will use rate-limiting and random delays.
   * Signed Entries(Optional, non-default)
   * Peer-Voting(Optional, non-default)
+
+## Non-Goals:
+
+  * Web interface. It's just a thing you ask for other things. It gives dumb answers
+  based on Cheech and Chong skits if you ask it a wrong question. It's for writing
+  applications against. Maybe when it's done a web interface can be written
+  against it.
