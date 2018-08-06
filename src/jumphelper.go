@@ -12,6 +12,7 @@ import (
 type JumpHelper struct {
 	addressBookPath  string
 	subscriptionURLs []string
+	threshhold       int
 
 	samHost string
 	samPort string
@@ -19,8 +20,9 @@ type JumpHelper struct {
 	ext     bool
 	verbose bool
 
-	addressBook       []string
-	remoteAddressBook []*addresslist
+	addressBook        []string
+	trustedAddressBook *addresslist
+	remoteAddressBook  []*addresslist
 }
 
 // LoadAddressBook loads an addressbook in csv(name, b32) format
@@ -65,12 +67,17 @@ func (j *JumpHelper) SearchAddressBook(pk string) []string {
 		}
 	}
 	for _, r := range j.remoteAddressBook {
-        result := r.SearchAddressList(j.trim(k.Host))
-        if result != nil {
-            return result
-        }
+		result := r.SearchAddressList(j.trim(k.Host))
+		if result != nil {
+			return result
+		}
 	}
 	return nil
+}
+
+// Vote returns true if an address is present, false if not
+func (j *JumpHelper) Vote(pk string) int {
+	return 0
 }
 
 // CheckAddressBook returns true if an address is present, false if not

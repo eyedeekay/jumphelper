@@ -83,6 +83,7 @@ func (c *Client) Jump(s string) (string, error) {
 	}
 	return string(bytes), nil
 }
+
 // NewClient creates a new jumphelper client
 func NewClient(Host, Port string, verbose bool) (*Client, error) {
 	return NewClientFromOptions(SetClientHost(Host), SetClientPort(Port), SetClientVerbose(verbose))

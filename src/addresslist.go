@@ -7,14 +7,14 @@ import (
 	"strings"
 
 	"github.com/eyedeekay/gosam"
-    "github.com/eyedeekay/i2pasta/convert"
+	"github.com/eyedeekay/i2pasta/convert"
 )
 
 type addresslist struct {
 	addressBookURL string
 	samHost        string
 	samPort        string
-    Lock           bool
+	Lock           bool
 
 	samBridgeConn *goSam.Client
 
@@ -29,15 +29,15 @@ func (a *addresslist) SyncRemoteAddressBooks(x *error) error {
 	log.Println("Syncing Subscription Contents")
 	resp, err := a.client.Get(a.addressBookURL)
 	if err != nil {
-        a.Lock = true
-        log.Printf(err.Error())
+		a.Lock = true
+		log.Printf(err.Error())
 		return err
 	}
 	defer resp.Body.Close()
 	b, e := ioutil.ReadAll(resp.Body)
 	if e != nil {
-        a.Lock = true
-        log.Printf(e.Error())
+		a.Lock = true
+		log.Printf(e.Error())
 		return e
 	}
 	lines := strings.Split(string(b), "\n")
@@ -48,7 +48,7 @@ func (a *addresslist) SyncRemoteAddressBooks(x *error) error {
 		}
 	}
 	log.Println("Subscription Contents Synced from", a.addressBookURL)
-    a.Lock = false
+	a.Lock = false
 	return nil
 }
 
@@ -62,24 +62,24 @@ func (a *addresslist) trim(k string) string {
 }
 
 func (a *addresslist) SearchAddressList(host string) []string {
-    if a.Lock == false {
-        for _, addresspair := range a.RemoteAddressBook {
-            r := strings.SplitN(addresspair, ",", 2)
-            if len(r) == 2 {
-                if r[0] == a.trim(host) {
-                    //j.printKvs(r)
-                    i := i2pconv.I2pconv{}
-                    s, e := i.I2p64to32(r[1])
-                    if e != nil {
-                        return nil
-                    }
-                    v := []string{r[0], s, r[1]}
-                    return v
-                }
-            }
-        }
-    }
-    return nil
+	if a.Lock == false {
+		for _, addresspair := range a.RemoteAddressBook {
+			r := strings.SplitN(addresspair, ",", 2)
+			if len(r) == 2 {
+				if r[0] == a.trim(host) {
+					//j.printKvs(r)
+					i := i2pconv.I2pconv{}
+					s, e := i.I2p64to32(r[1])
+					if e != nil {
+						return nil
+					}
+					v := []string{r[0], s, r[1]}
+					return v
+				}
+			}
+		}
+	}
+	return nil
 }
 
 func newAddressList(u, samhost, samport string) (*addresslist, error) {
@@ -88,12 +88,12 @@ func newAddressList(u, samhost, samport string) (*addresslist, error) {
 	a.samHost = samhost
 	a.samPort = samport
 	a.addressBookURL = u
-    a.Lock = true
+	a.Lock = true
 	a.samBridgeConn, err = goSam.NewClientFromOptions(
 		goSam.SetHost(a.samHost),
 		goSam.SetPort(a.samPort),
-		goSam.SetInLength(2),
-		goSam.SetOutLength(2),
+		goSam.SetInLength(3),
+		goSam.SetOutLength(3),
 		goSam.SetInQuantity(15),
 		goSam.SetInBackups(5),
 		goSam.SetOutQuantity(5),
@@ -107,6 +107,6 @@ func newAddressList(u, samhost, samport string) (*addresslist, error) {
 		Dial: a.samBridgeConn.Dial,
 	}
 	a.client = &http.Client{Transport: a.tr}
-    go a.SyncRemoteAddressBooks(&err)
+	go a.SyncRemoteAddressBooks(&err)
 	return &a, nil
 }
