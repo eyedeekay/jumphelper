@@ -78,7 +78,7 @@ func (s *Server) HandleExists(w http.ResponseWriter, r *http.Request) {
 }
 
 // HandleJump redirects to a b32.i2p URL instead of behaving like a traditional jump service.
-func (s *Server) HandleJump(w http.ResponseWriter, r *http.Request) {
+func (s *Server) HandleLookup(w http.ResponseWriter, r *http.Request) {
 	p := strings.TrimPrefix(strings.Replace(r.URL.Path, "request/", "", 1), "/")
 	if s.jumpHelper.SearchAddressBook(p) != nil {
 		line := "http://" + s.jumpHelper.SearchAddressBook(p)[1] + ".b32.i2p"
@@ -92,7 +92,7 @@ func (s *Server) HandleJump(w http.ResponseWriter, r *http.Request) {
 }
 
 // HandleLookup redirects to a base64 URL like a traditional jump service.
-func (s *Server) HandleLookup(w http.ResponseWriter, r *http.Request) {
+func (s *Server) HandleJump(w http.ResponseWriter, r *http.Request) {
 	p := strings.TrimPrefix(strings.Replace(r.URL.Path, "jump/", "", 1), "/")
 	if s.jumpHelper.SearchAddressBook(p) != nil {
 		array := s.jumpHelper.SearchAddressBook(p)
@@ -136,8 +136,8 @@ func (s *Server) HandleBase32(w http.ResponseWriter, r *http.Request) {
 func (s *Server) NewMux() (*http.ServeMux, error) {
 	s.localService = http.NewServeMux()
 	s.localService.HandleFunc("/check/", s.HandleExists)
-	s.localService.HandleFunc("/request/", s.HandleJump)
-	s.localService.HandleFunc("/jump/", s.HandleLookup)
+	s.localService.HandleFunc("/request/", s.HandleLookup)
+	s.localService.HandleFunc("/jump/", s.HandleJump)
 	s.localService.HandleFunc("/sub/", s.HandleListing)
 	s.localService.HandleFunc("/addr/", s.HandleBase32)
 	s.localService.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
