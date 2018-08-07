@@ -18,5 +18,6 @@ CMD ./bin/jumphelper -host="0.0.0.0" \
     -port="7854" \
     -samhost=sam-host \
     -samport="7656" \
+    -difficulty=1 \
     -hostfile=/var/lib/i2pd/addressbook/addresses.csv \
     -subs "http://joajgazyztfssty4w2on5oaqksz6tqoxbduy553y34mf4byv6gpq.b32.i2p/export/alive-hosts.txt"

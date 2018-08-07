@@ -106,9 +106,9 @@ func (c *Client) Signup(domain, base64 string) (string, error) {
 		resp2, err := c.client.Get(
 			c.address(string(bytes)+","+proof+","+domain+","+base64, "acct"),
 		)
-        defer resp2.Body.Close()
-        bytes2, err := ioutil.ReadAll(resp2.Body)
-        if err != nil {
+		defer resp2.Body.Close()
+		bytes2, err := ioutil.ReadAll(resp2.Body)
+		if err != nil {
 			return "", err
 		}
 		return string(bytes2), nil

@@ -213,8 +213,8 @@ func (s *Server) HandleAccount(w http.ResponseWriter, r *http.Request) {
 					return
 				}
 			}
-            fmt.Fprintln(w, "Invalid request length to accound handler", len(reqproof))
-            return
+			fmt.Fprintln(w, "Invalid request length to accound handler", len(reqproof))
+			return
 		}
 		fmt.Fprintln(w, "That basketball was just like a basketball to me.")
 		return

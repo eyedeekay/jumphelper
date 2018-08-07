@@ -15,28 +15,13 @@ t: lint test build
 
 d: docker docker-run
 
-docker: docker-host docker-build
+docker: docker-build
 
 docker-build:
 	docker build -f Dockerfile -t eyedeekay/jumphelper .
 
 docker-network:
-	docker network create --subnet 172.80.80.0/24 jumphelper; true
-
-docker-host: docker-network
-	docker run -d \
-		--name sam-host \
-		--network si \
-		--network-alias sam-host \
-		--hostname sam-host \
-		--link si-proxy \
-		--restart always \
-		--ip 172.80.80.2 \
-		-p :4567 \
-		-p 127.0.0.1:7073:7073 \
-		-p 127.0.0.1:7656:7656 \
-		--volume $(i2pd_dat):/var/lib/i2pd:rw \
-		-t eyedeekay/sam-host; true
+	docker network create --subnet 172.80.80.0/24 si; true
 
 docker-run: docker-network
 	docker rm -f sam-jumphelper; true
@@ -50,9 +35,9 @@ docker-run: docker-network
 		--link sam-host \
 		--restart always \
 		--ip 172.80.80.3 \
-		-p 127.0.0.1:7854:7854 \
-		--volume sam-jumphelper:/opt/work \
-		-t eyedeekay/sam-jumphelper; true
+		-p 127.0.0.1:7855:7855 \
+		--volume forwarded-jumphelper:/opt/work \
+		-t eyedeekay/jumphelper; true
 
 docker-clean:
 	docker rm -f jumphelper; true
