@@ -193,7 +193,7 @@ func (s *Server) HandleAccount(w http.ResponseWriter, r *http.Request) {
 	if s.listing {
 		p := strings.TrimPrefix(strings.Replace(r.URL.Path, "acct/", "", 1), "/")
 		if p != "" {
-			reqproof := strings.SplitN(p, ",", 4)
+			reqproof := strings.Split(p, ",")
 			if len(reqproof) == 4 {
 				ok, err := pow.Check(reqproof[0], reqproof[1], []byte(reqproof[2]))
 				if err != nil {
@@ -207,11 +207,14 @@ func (s *Server) HandleAccount(w http.ResponseWriter, r *http.Request) {
 				}
 				fmt.Fprintln(w, "proof-of-work invalid")
 				return
+			} else if len(reqproof) == 2 {
+				if strings.HasSuffix(reqproof[0], ".i2p") {
+					fmt.Fprintln(w, pow.NewRequest(uint32(s.difficulty*2), []byte(nonce.NewToken())))
+					return
+				}
 			}
-			fmt.Fprintln(w, "Invalid length for proof-of-work check=", len(reqproof))
-			return
 		}
-		fmt.Fprintln(w, pow.NewRequest(uint32(s.difficulty*2), []byte(nonce.NewToken())))
+		fmt.Fprintln(w, "That basketball was just like a basketball to me.")
 		return
 	}
 	fmt.Fprintln(w, "Listings disabled for this server")
