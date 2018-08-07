@@ -50,6 +50,8 @@ func main() {
 	}
 	var forwarder *samforwarder.SAMForwarder
 	var err error
+    b32 := ""
+    b64 := ""
 	if *forward {
 		if forwarder, err = samforwarder.NewSAMForwarderFromOptions(
 			samforwarder.SetHost(*host),
@@ -71,6 +73,8 @@ func main() {
 		); err == nil {
 			go forwarder.Serve()
 			log.Println("Service available on:", forwarder.Base32(), forwarder.Base64())
+            b32 = forwarder.Base32()
+            b64 = forwarder.Base64()
 		} else {
 			log.Fatal(err, "Error starting forwarder")
 		}
@@ -86,8 +90,8 @@ func main() {
 		jumphelper.SetServerSubscription(subscriptions),
 		jumphelper.SetServerJumpHelperVerbosity(*verbose),
 		jumphelper.SetServerEnableListing(*share),
-		jumphelper.SetServerBase32(forwarder.Base32()),
-        jumphelper.SetServerBase64(forwarder.Base64()),
+		jumphelper.SetServerBase32(b32),
+        jumphelper.SetServerBase64(b64),
 		jumphelper.SetServerDifficulty(*difficulty),
 	)
 	if err != nil {
