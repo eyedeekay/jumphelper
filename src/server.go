@@ -320,8 +320,12 @@ func NewServerFromOptions(opts ...func(*Server) error) (*Server, error) {
 		if s.err != nil {
 			return nil, s.err
 		}
-		s.transport.Dial = s.pusher.Dial
-		s.client.Transport = s.transport
+		s.transport = &http.Transport {
+            Dial: s.pusher.Dial,
+        }
+		s.client = &http.Client {
+            Transport: s.transport,
+        }
 	}
 	s.jumpHelper, s.err = NewJumpHelperFromOptions(
 		SetJumpHelperAddressBookPath(s.addressBookPath),

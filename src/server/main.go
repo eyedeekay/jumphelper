@@ -65,7 +65,7 @@ func main() {
 			samforwarder.SetInBackups(5),
 			samforwarder.SetOutBackups(5),
 			samforwarder.SetReduceIdle(true),
-			samforwarder.SetReduceIdleTime(31),
+			samforwarder.SetReduceIdleTimeMs(300001),
 			samforwarder.SetReduceIdleQuantity(4),
 			samforwarder.SetCompress(true),
 		); err == nil {
