@@ -24,17 +24,17 @@ docker-network:
 	docker network create --subnet 172.80.80.0/24 si; true
 
 docker-run: docker-network
-	docker rm -f sam-jumphelper; true
+	docker rm -f jumphelper; true
 	docker run \
 		-d \
-		--name sam-jumphelper \
+		--name jumphelper \
 		--network si \
-		--network-alias sam-jumphelper \
-		--hostname sam-jumphelper \
+		--network-alias jumphelper \
+		--hostname jumphelper \
 		--link si-proxy \
 		--link sam-host \
 		--restart always \
-		--ip 172.80.80.3 \
+		--ip 172.80.80.13 \
 		-p 127.0.0.1:7855:7855 \
 		--volume forwarded-jumphelper:/opt/work \
 		-t eyedeekay/jumphelper; true
