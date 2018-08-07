@@ -103,3 +103,14 @@ func SetServerEnableListing(s bool) func(*Server) error {
 		return nil
 	}
 }
+
+//SetServerDifficulty sets the host of the Server client's SAM bridge
+func SetServerDifficulty(s int) func(*Server) error {
+	return func(c *Server) error {
+		if s > 0 && s < 20 {
+			c.difficulty = s
+			return nil
+		}
+		return fmt.Errorf("Invalid proof-of-work difficulty")
+	}
+}

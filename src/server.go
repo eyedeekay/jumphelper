@@ -6,7 +6,11 @@ import (
 	"net/http"
 	"strings"
 	"time"
+)
 
+import (
+	"github.com/LarryBattle/nonce-golang"
+	"github.com/bwesterb/go-pow"
 	"github.com/eyedeekay/gosam"
 	"golang.org/x/time/rate"
 )
@@ -30,7 +34,7 @@ type Server struct {
 	subscriptionURLs []string
 	listing          bool
 	base32           string
-	//s                *SamResponseWriter
+	difficulty       int
 
 	rate  int
 	burst int
@@ -174,6 +178,46 @@ func (s *Server) HandleRecv(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
+// HandleProof emits a problem for proof-of-work on the client
+func (s *Server) HandleProof(w http.ResponseWriter, r *http.Request) {
+	if s.listing {
+		fmt.Fprintln(w, pow.NewRequest(uint32(s.difficulty), []byte(nonce.NewToken())))
+		return
+	}
+	fmt.Fprintln(w, "Listings disabled for this server")
+	return
+}
+
+// HandleAccount emits a problem for proof-of-work on the client
+func (s *Server) HandleAccount(w http.ResponseWriter, r *http.Request) {
+	if s.listing {
+		p := strings.TrimPrefix(strings.Replace(r.URL.Path, "acct/", "", 1), "/")
+		if p != "" {
+			reqproof := strings.SplitN(p, ",", 4)
+			if len(reqproof) == 4 {
+				ok, err := pow.Check(reqproof[0], reqproof[1], []byte(reqproof[2]))
+				if err != nil {
+					fmt.Fprintln(w, err.Error())
+					return
+				}
+				if ok {
+					s.jumpHelper.TrustedAddressBook.AddAddress(reqproof[2], reqproof[3])
+					fmt.Fprintln(w, "proof-of-work valid")
+					return
+				}
+				fmt.Fprintln(w, "proof-of-work invalid")
+				return
+			}
+			fmt.Fprintln(w, "Invalid length for proof-of-work check=", len(reqproof))
+			return
+		}
+		fmt.Fprintln(w, pow.NewRequest(uint32(s.difficulty*2), []byte(nonce.NewToken())))
+		return
+	}
+	fmt.Fprintln(w, "Listings disabled for this server")
+	return
+}
+
 // NewMux sets up a new ServeMux with handlers
 func (s *Server) NewMux() (*http.ServeMux, error) {
 	s.localService = http.NewServeMux()
@@ -184,6 +228,9 @@ func (s *Server) NewMux() (*http.ServeMux, error) {
 	s.localService.HandleFunc("/addr/", s.HandleBase32)
 	s.localService.HandleFunc("/push/", s.HandlePush)
 	s.localService.HandleFunc("/recv/", s.HandleRecv)
+	s.localService.HandleFunc("/acct/", s.HandleAccount)
+	//s.localService.HandleFunc("/update/", s.HandleUpdate)
+	s.localService.HandleFunc("/pow", s.HandleProof)
 	s.localService.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintln(w, "Dave's not here man.")
 	})
@@ -229,6 +276,7 @@ func NewServerFromOptions(opts ...func(*Server) error) (*Server, error) {
 	s.verbose = false
 	s.listing = false
 	s.base32 = ""
+	s.difficulty = 1
 	s.subscriptionURLs = []string{"http://joajgazyztfssty4w2on5oaqksz6tqoxbduy553y34mf4byv6gpq.b32.i2p/export/alive-hosts.txt"}
 	for _, o := range opts {
 		if err := o(&s); err != nil {

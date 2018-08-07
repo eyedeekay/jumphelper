@@ -21,7 +21,7 @@ type JumpHelper struct {
 	verbose bool
 
 	addressBook        []string
-	trustedAddressBook *addresslist
+	TrustedAddressBook *addresslist
 	remoteAddressBook  []*addresslist
 }
 

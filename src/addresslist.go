@@ -82,6 +82,22 @@ func (a *addresslist) SearchAddressList(host string) []string {
 	return nil
 }
 
+func (a *addresslist) AddAddress(domain, base64 string) error {
+	if a.Lock == false {
+		for index, addresspair := range a.RemoteAddressBook {
+			r := strings.SplitN(addresspair, ",", 2)
+			if len(r) == 2 {
+				if r[0] == a.trim(domain) {
+					a.RemoteAddressBook[index] = domain + "," + base64
+					return nil
+				}
+			}
+		}
+		a.RemoteAddressBook = append(a.RemoteAddressBook, domain+","+base64)
+	}
+	return nil
+}
+
 func newAddressList(u, samhost, samport string) (*addresslist, error) {
 	var a addresslist
 	var err error

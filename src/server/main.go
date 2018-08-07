@@ -38,6 +38,7 @@ func main() {
 	share := flag.Bool("share", false, "Repeat concatenated listings as subscription list")
 	forward := flag.Bool("i2p", false, "Forward service to an i2p destination over a SAM connection")
 	tunname := flag.String("tunname", "jumphelper", "Tunnel name for SAM forwarding.")
+	difficulty := flag.Int("diff", 1, "proof of work difficulty to hand out(will be double for account creation)")
 	verbose := flag.Bool("verbose", false, "Verbose?")
 
 	flag.Var(&subscriptions, "subs", "Subscription URL(Can be specified multiple times)")
@@ -75,9 +76,19 @@ func main() {
 		}
 	}
 
-	s, err := jumphelper.NewServer(*host, *port, *book, *samhost, *samport,
-		subscriptions,
-		*useremote, *verbose, *share, forwarder.Base32())
+	s, err := jumphelper.NewServerFromOptions(
+		jumphelper.SetServerHost(*host),
+		jumphelper.SetServerPort(*port),
+		jumphelper.SetServerAddressBookPath(*book),
+		jumphelper.SetServerJumpHelperHost(*samhost),
+		jumphelper.SetServerJumpHelperPort(*samport),
+		jumphelper.SetServerUseHelper(subscriptions),
+		jumphelper.SetServerSubscription(*useremote),
+		jumphelper.SetServerJumpHelperVerbosity(*verbose),
+		jumphelper.SetServerEnableListing(*share),
+		jumphelper.SetServerBase32(forwarder.Base32()),
+		jumphelper.SetServerDifficulty(*difficulty),
+	)
 	if err != nil {
 		log.Fatal(err, "Error starting server")
 	}

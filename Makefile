@@ -124,6 +124,8 @@ curl:
 	/usr/bin/curl -l 127.0.0.1:7854/i2p-projekt.i2p
 
 deps:
+	go get -u github.com/LarryBattle/nonce-golang
+	go get -u github.com/bwesterb/go-pow
 	go get -u github.com/eyedeekay/jumphelper/src
 	go get -u github.com/eyedeekay/sam-forwarder
 	go get -u github.com/eyedeekay/gosam

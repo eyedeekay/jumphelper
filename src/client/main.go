@@ -15,6 +15,7 @@ func main() {
 	addr := flag.Bool("addr", false, "Show base32 URL?.")
 	addr64 := flag.Bool("addr64", false, "Show base64 address?.")
 	verbose := flag.Bool("verbose", false, "Verbose?.")
+	//domain := flag.String("domain", ".i2p", "i2p domain name to register")
 	flag.Parse()
 
 	c, err := jumphelper.NewClient(*host, *port, *verbose)
