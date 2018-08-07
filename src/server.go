@@ -142,8 +142,7 @@ func (s *Server) HandlePush(w http.ResponseWriter, r *http.Request) {
 	if s.listing {
 		p := strings.TrimPrefix(strings.Replace(r.URL.Path, "push/", "", 1), "/")
 		if p != "" {
-			stringList := strings.Join(s.jumpHelper.Subs(), ",")
-			send, err := http.NewRequest("GET", p, strings.NewReader(stringList))
+			send, err := http.NewRequest("POST", p, strings.NewReader(strings.Join(s.jumpHelper.Subs(), ",")))
 			if err != nil {
 				return
 			}
@@ -163,7 +162,9 @@ func (s *Server) HandleRecv(w http.ResponseWriter, r *http.Request) {
 	if s.listing {
 		p := strings.TrimPrefix(strings.Replace(r.URL.Path, "recv/", "", 1), "/")
 		if p != "" {
-			fmt.Fprintln(w, "I recieved a push from:", r.Header.Get("X-I2p-Destb32"), "And for now, I did nothing with it because I am dumb)")
+			fmt.Fprintln(w, "I recieved a push from:",
+				r.Header.Get("X-I2p-Destb32"),
+				"And for now, I did nothing with it because I am dumb)")
 			return
 		}
 		fmt.Fprintln(w, "FALSE")
@@ -238,23 +239,23 @@ func NewServerFromOptions(opts ...func(*Server) error) (*Server, error) {
 	log.Println("Configured Rate Limiter")
 	if s.listing {
 		s.pusher, s.err = goSam.NewClientFromOptions(
-            goSam.SetHost(s.samHost),
-            goSam.SetPort(s.samPort),
-            goSam.SetUnpublished(true),
-            goSam.SetInLength(uint(3)),
-            goSam.SetOutLength(uint(3)),
-            goSam.SetInQuantity(uint(6)),
-            goSam.SetOutQuantity(uint(6)),
-            goSam.SetInBackups(uint(2)),
-            goSam.SetOutBackups(uint(2)),
-            goSam.SetCloseIdle(true),
-            goSam.SetCloseIdleTime(uint(300000)),
-        )
-        if s.err != nil {
-            return nil, s.err
-        }
-        s.transport.Dial = s.pusher.Dial
-        s.client.Transport = s.transport
+			goSam.SetHost(s.samHost),
+			goSam.SetPort(s.samPort),
+			goSam.SetUnpublished(true),
+			goSam.SetInLength(uint(3)),
+			goSam.SetOutLength(uint(3)),
+			goSam.SetInQuantity(uint(6)),
+			goSam.SetOutQuantity(uint(6)),
+			goSam.SetInBackups(uint(2)),
+			goSam.SetOutBackups(uint(2)),
+			goSam.SetCloseIdle(true),
+			goSam.SetCloseIdleTime(uint(300000)),
+		)
+		if s.err != nil {
+			return nil, s.err
+		}
+		s.transport.Dial = s.pusher.Dial
+		s.client.Transport = s.transport
 	}
 	s.jumpHelper, s.err = NewJumpHelperFromOptions(
 		SetJumpHelperAddressBookPath(s.addressBookPath),
