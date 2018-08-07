@@ -34,6 +34,7 @@ type Server struct {
 	subscriptionURLs []string
 	listing          bool
 	base32           string
+	base64           string
 	difficulty       int
 
 	rate  int
@@ -141,6 +142,16 @@ func (s *Server) HandleBase32(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
+// HandleBase64 lists all synced remote jumphelper urls.
+func (s *Server) HandleBase64(w http.ResponseWriter, r *http.Request) {
+	if s.listing {
+		fmt.Fprintln(w, s.base64)
+		return
+	}
+	fmt.Fprintln(w, "Listings disabled for this server")
+	return
+}
+
 // HandlePush creates a signed list of addresses and pushes it to a requested URL
 func (s *Server) HandlePush(w http.ResponseWriter, r *http.Request) {
 	if s.listing {
@@ -231,6 +242,7 @@ func (s *Server) NewMux() (*http.ServeMux, error) {
 	s.localService.HandleFunc("/jump/", s.HandleJump)
 	s.localService.HandleFunc("/sub/", s.HandleListing)
 	s.localService.HandleFunc("/addr/", s.HandleBase32)
+	s.localService.HandleFunc("/addr64/", s.HandleBase64)
 	s.localService.HandleFunc("/push/", s.HandlePush)
 	s.localService.HandleFunc("/recv/", s.HandleRecv)
 	s.localService.HandleFunc("/acct/", s.HandleAccount)
@@ -281,6 +293,7 @@ func NewServerFromOptions(opts ...func(*Server) error) (*Server, error) {
 	s.verbose = false
 	s.listing = false
 	s.base32 = ""
+	s.base64 = ""
 	s.difficulty = 1
 	s.subscriptionURLs = []string{"http://joajgazyztfssty4w2on5oaqksz6tqoxbduy553y34mf4byv6gpq.b32.i2p/export/alive-hosts.txt"}
 	for _, o := range opts {

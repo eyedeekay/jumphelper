@@ -70,7 +70,7 @@ func main() {
 			samforwarder.SetCompress(true),
 		); err == nil {
 			go forwarder.Serve()
-			log.Println("Service available on:", forwarder.Base32())
+			log.Println("Service available on:", forwarder.Base32(), forwarder.Base64())
 		} else {
 			log.Fatal(err, "Error starting forwarder")
 		}
@@ -87,6 +87,7 @@ func main() {
 		jumphelper.SetServerJumpHelperVerbosity(*verbose),
 		jumphelper.SetServerEnableListing(*share),
 		jumphelper.SetServerBase32(forwarder.Base32()),
+        jumphelper.SetServerBase64(forwarder.Base64()),
 		jumphelper.SetServerDifficulty(*difficulty),
 	)
 	if err != nil {

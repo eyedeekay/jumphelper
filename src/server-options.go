@@ -24,6 +24,14 @@ func SetServerBase32(s string) func(*Server) error {
 	}
 }
 
+//SetServerBase64 sets the host of the Server client's SAM bridge
+func SetServerBase64(s string) func(*Server) error {
+	return func(c *Server) error {
+		c.base64 = s
+		return nil
+	}
+}
+
 //SetServerHost sets the host of the Server client's SAM bridge
 func SetServerHost(s string) func(*Server) error {
 	return func(c *Server) error {
