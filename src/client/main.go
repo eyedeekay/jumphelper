@@ -28,33 +28,33 @@ func main() {
 				if e != nil {
 					log.Fatal(e)
 				}
-                fmt.Println("true")
+				fmt.Println("true")
 			} else {
 				if e != nil {
 					log.Fatal(e)
 				}
-                fmt.Println("false")
+				fmt.Println("false")
 			}
 		} else {
 			if s, e := c.Request(*url); s != "FALSE" {
 				if e != nil {
 					log.Fatal(e)
 				}
-                fmt.Println("true", s)
+				fmt.Println("true", s)
 			} else {
 				if e != nil {
 					log.Fatal(e)
 				}
-                fmt.Println("false")
+				fmt.Println("false")
 			}
 		}
-        if *addr64 {
-            if s, e := c.Jump(*url); len(s) > 40 {
-                if e != nil {
-                    log.Fatal(e)
-                }
-                fmt.Println(s)
-            }
-        }
+		if *addr64 {
+			if s, e := c.Jump(*url); len(s) > 40 {
+				if e != nil {
+					log.Fatal(e)
+				}
+				fmt.Println(s)
+			}
+		}
 	}
 }
