@@ -148,6 +148,13 @@ func (s *Server) HandleBase64(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
+func (s *Server) HandleReflectHeaders(w http.ResponseWriter, r *http.Request) {
+    for _, h := range r.Header {
+        fmt.Fprintln(w, h)
+    }
+	return
+}
+
 // HandleReflect32 replies back with the base32 of the client requesting it
 func (s *Server) HandleReflect32(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, r.Header.Get("X-I2p-Destb32"))
@@ -274,6 +281,8 @@ func (s *Server) NewMux() (*http.ServeMux, error) {
     log.Println("registering /reflect64/")
 	s.localService.HandleFunc("/reflect/", s.HandleReflectBoth)
     log.Println("registering /reflect/")
+    s.localService.HandleFunc("/headers/", s.HandleReflectHeaders)
+    log.Println("registering /headers/")
 	s.localService.HandleFunc("/pow/", s.HandleProof)
     log.Println("registering /pow/")
 	s.localService.HandleFunc("/sub/", s.HandleListing)
