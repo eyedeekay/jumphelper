@@ -59,8 +59,8 @@ func (s *Server) limit(next http.Handler) http.Handler {
 	})
 }
 
-// ServeLocal sets up a listening server on the specified port
-func (s *Server) ServeLocal() {
+// Serve sets up a listening server on the specified port
+func (s *Server) Serve() {
 	s.localService, s.err = s.NewMux()
 	if s.err != nil {
 		log.Fatal(s.err)
@@ -69,11 +69,6 @@ func (s *Server) ServeLocal() {
 	if s.err != nil {
 		log.Fatal(s.err)
 	}
-}
-
-// Serve sets up a listening server on the specified port
-func (s *Server) Serve() {
-	s.ServeLocal()
 }
 
 // HandleExists prints true:address if an antecedent URL exists in the addressbook, false if not
