@@ -18,7 +18,7 @@ d: docker docker-run
 docker: docker-build
 
 docker-build:
-	docker build -f Dockerfile -t eyedeekay/jumphelper .
+	docker build --no-cache -f Dockerfile -t eyedeekay/jumphelper .
 
 docker-network:
 	docker network create --subnet 172.80.80.0/24 si; true
