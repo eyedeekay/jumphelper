@@ -40,9 +40,13 @@ docker-run: docker-network docker-clean
 docker-clean:
 	docker rm -f jumphelper; true
 
-install:
+install-client:
 	install -m755 bin/ijh /usr/bin
+
+install-server:
 	install -m755 bin/jumphelper /usr/bin
+
+install: install-client install-server
 
 clean:
 	rm -f bin/*
