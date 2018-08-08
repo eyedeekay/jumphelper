@@ -61,6 +61,7 @@ func (s *Server) limit(next http.Handler) http.Handler {
 
 // Serve sets up a listening server on the specified port
 func (s *Server) Serve() {
+    log.Println("Serving new Mux")
 	s.localService, s.err = s.NewMux()
 	if s.err != nil {
 		log.Fatal(s.err)
