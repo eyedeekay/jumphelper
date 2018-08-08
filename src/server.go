@@ -277,7 +277,7 @@ func (s *Server) NewMux() (*http.ServeMux, error) {
 	s.localService.HandleFunc("/pow/", s.HandleProof)
     log.Println("registering /pow/")
 	s.localService.HandleFunc("/sub/", s.HandleListing)
-    log.Println("registering /sub"/)
+    log.Println("registering /sub/")
 
 	s.localService.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintln(w, "Dave's not here man.")
