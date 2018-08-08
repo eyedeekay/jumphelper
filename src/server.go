@@ -264,24 +264,24 @@ func (s *Server) NewMux() (*http.ServeMux, error) {
 	s.localService.HandleFunc("/request/", s.HandleLookup)
     log.Println("registering /request/")
 
-	s.localService.HandleFunc("/addr", s.HandleBase32)
-    log.Println("registering /addr")
-	s.localService.HandleFunc("/addr64", s.HandleBase64)
-    log.Println("registering /addr64")
-	s.localService.HandleFunc("/reflect32", s.HandleReflect32)
-    log.Println("registering /reflect32")
-	s.localService.HandleFunc("/reflect64", s.HandleReflect64)
-    log.Println("registering /reflect64")
-	s.localService.HandleFunc("/reflect", s.HandleReflectBoth)
-    log.Println("registering /reflect")
-	s.localService.HandleFunc("/pow", s.HandleProof)
-    log.Println("registering /pow")
-	s.localService.HandleFunc("/sub", s.HandleListing)
-    log.Println("registering /sub")
+	s.localService.HandleFunc("/addr/", s.HandleBase32)
+    log.Println("registering /addr/")
+	s.localService.HandleFunc("/addr64/", s.HandleBase64)
+    log.Println("registering /addr64/")
+	s.localService.HandleFunc("/reflect32/", s.HandleReflect32)
+    log.Println("registering /reflect32/")
+	s.localService.HandleFunc("/reflect64/", s.HandleReflect64)
+    log.Println("registering /reflect64/")
+	s.localService.HandleFunc("/reflect/", s.HandleReflectBoth)
+    log.Println("registering /reflect/")
+	s.localService.HandleFunc("/pow/", s.HandleProof)
+    log.Println("registering /pow/")
+	s.localService.HandleFunc("/sub/", s.HandleListing)
+    log.Println("registering /sub"/)
 
-	/*s.localService.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	s.localService.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintln(w, "Dave's not here man.")
-	})*/
+	})
 
 	if s.err != nil {
 		return nil, fmt.Errorf("Local mux configuration error: %s", s.err)

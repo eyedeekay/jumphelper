@@ -98,5 +98,6 @@ func main() {
 	if err != nil {
 		log.Fatal(err, "Error starting server")
 	}
+    log.Println("Starting server")
 	s.Serve()
 }
