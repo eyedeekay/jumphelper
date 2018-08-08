@@ -152,20 +152,20 @@ func (s *Server) HandleBase64(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
-// HandleMe32 replies back with the base32 of the client requesting it
-func (s *Server) HandleMe32(w http.ResponseWriter, r *http.Request) {
+// HandleReflect32 replies back with the base32 of the client requesting it
+func (s *Server) HandleReflect32(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, r.Header.Get("X-I2p-Destb32"))
 	return
 }
 
-// HandleMe64 replies back with the base64 of the client requesting it
-func (s *Server) HandleMe64(w http.ResponseWriter, r *http.Request) {
+// HandleReflect64 replies back with the base64 of the client requesting it
+func (s *Server) HandleReflect64(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, r.Header.Get("X-I2p-Destb64"))
 	return
 }
 
-// HandleMeBoth replies back with both the base32 and base64 of the client requesting it
-func (s *Server) HandleMeBoth(w http.ResponseWriter, r *http.Request) {
+// HandleReflectBoth replies back with both the base32 and base64 of the client requesting it
+func (s *Server) HandleReflectBoth(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, r.Header.Get("X-I2p-Destb32"), ",", r.Header.Get("X-I2p-Destb64"))
 	return
 }
@@ -264,9 +264,9 @@ func (s *Server) NewMux() (*http.ServeMux, error) {
 
 	s.localService.HandleFunc("/addr", s.HandleBase32)
 	s.localService.HandleFunc("/addr64", s.HandleBase64)
-	s.localService.HandleFunc("/me32", s.HandleMe32)
-	s.localService.HandleFunc("/me64", s.HandleMe64)
-	s.localService.HandleFunc("/me", s.HandleMeBoth)
+	s.localService.HandleFunc("/reflect32", s.HandleReflect32)
+	s.localService.HandleFunc("/reflect64", s.HandleReflect64)
+	s.localService.HandleFunc("/reflect", s.HandleReflectBoth)
 	s.localService.HandleFunc("/pow", s.HandleProof)
 	s.localService.HandleFunc("/sub", s.HandleListing)
 
