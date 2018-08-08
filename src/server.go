@@ -152,6 +152,37 @@ func (s *Server) HandleBase64(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
+// HandleMe32 replies back with the base32 of the client requesting it
+func (s *Server) HandleMe32(w http.ResponseWriter, r *http.Request) {
+	if s.listing {
+		fmt.Fprintln(w, r.Header.Get("X-I2p-Destb32"))
+		return
+	}
+	fmt.Fprintln(w, "Listings disabled for this server")
+	return
+}
+
+// HandleMe64 replies back with the base64 of the client requesting it
+func (s *Server) HandleMe64(w http.ResponseWriter, r *http.Request) {
+	if s.listing {
+		fmt.Fprintln(w, r.Header.Get("X-I2p-Destb64"))
+		return
+	}
+	fmt.Fprintln(w, "Listings disabled for this server")
+	return
+}
+
+// HandleMeBoth replies back with both the base32 and base64 of the client requesting it
+func (s *Server) HandleMeBoth(w http.ResponseWriter, r *http.Request) {
+	if s.listing {
+        fmt.Fprintln(w, r.Header.Get("X-I2p-Destb32"))
+		fmt.Fprintln(w, r.Header.Get("X-I2p-Destb64"))
+		return
+	}
+	fmt.Fprintln(w, "Listings disabled for this server")
+	return
+}
+
 // HandlePush creates a signed list of addresses and pushes it to a requested URL
 func (s *Server) HandlePush(w http.ResponseWriter, r *http.Request) {
 	if s.listing {
@@ -243,10 +274,12 @@ func (s *Server) NewMux() (*http.ServeMux, error) {
 	s.localService.HandleFunc("/sub/", s.HandleListing)
 	s.localService.HandleFunc("/addr/", s.HandleBase32)
 	s.localService.HandleFunc("/addr64/", s.HandleBase64)
+    s.localService.HandleFunc("/me32/", s.HandleMe32)
+    s.localService.HandleFunc("/me64/", s.HandleMe64)
+    s.localService.HandleFunc("/me/", s.HandleMeBoth)
 	s.localService.HandleFunc("/push/", s.HandlePush)
 	s.localService.HandleFunc("/recv/", s.HandleRecv)
 	s.localService.HandleFunc("/acct/", s.HandleAccount)
-	//s.localService.HandleFunc("/update/", s.HandleUpdate)
 	s.localService.HandleFunc("/pow", s.HandleProof)
 	s.localService.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintln(w, "Dave's not here man.")

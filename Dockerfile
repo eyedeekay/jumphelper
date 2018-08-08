@@ -14,9 +14,9 @@ VOLUME /opt/work
 CMD ./bin/jumphelper -host="0.0.0.0" \
     -share=true \
     -i2p=true \
-    -tunname="sam-jumpkelper" \
+    -tunname="sam-jumphelper" \
     -port="7855" \
-    -samhost=sam-host \
+    -samhost="172.80.80.2" \
     -samport="7656" \
     -difficulty=1 \
     -hostfile=/var/lib/i2pd/addressbook/addresses.csv \
