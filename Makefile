@@ -23,15 +23,13 @@ docker-build:
 docker-network:
 	docker network create --subnet 172.80.80.0/24 si; true
 
-docker-run: docker-network
-	docker rm -f jumphelper; true
+docker-run: docker-network docker-clean
 	docker run \
 		-d \
 		--name jumphelper \
 		--network si \
 		--network-alias jumphelper \
 		--hostname jumphelper \
-		--link si-proxy \
 		--link sam-host \
 		--restart always \
 		--ip 172.80.80.13 \
