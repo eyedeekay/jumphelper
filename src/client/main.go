@@ -31,17 +31,17 @@ func main() {
 		if *domain != ".i2p" {
 			if s, e := c.Signup(*domain, *base64); e == nil {
 				fmt.Println("Signup:", s)
-                if s, e := c.Register(s, *domain, *base64); e == nil {
-                    fmt.Println("Registration:", s)
-                } else {
-                    log.Fatal(e)
-                }
+				if s, e := c.Register(s, *domain, *base64); e == nil {
+					fmt.Println("Registration:", s)
+				} else {
+					log.Fatal(e)
+				}
 			} else {
 				log.Fatal(e)
 			}
-		}else{
-            log.Fatal("Error invalid domain", *domain)
-        }
+		} else {
+			log.Fatal("Error invalid domain", *domain)
+		}
 	}
 
 	if *url != "false" {

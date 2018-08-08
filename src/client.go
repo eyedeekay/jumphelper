@@ -102,14 +102,14 @@ func (c *Client) Signup(domain, base64 string) (string, error) {
 		if err != nil {
 			return "", err
 		}
-        return string(bytes), nil
+		return string(bytes), nil
 	}
 	return "", fmt.Errorf("Account exists, use update instead")
 }
 
-func (c *Client) Register(input, domain, base64 string)(string, error) {
-    proof, err := pow.Fulfil(string(input), []byte(domain))
-    if err != nil {
+func (c *Client) Register(input, domain, base64 string) (string, error) {
+	proof, err := pow.Fulfil(string(input), []byte(domain))
+	if err != nil {
 		return "", err
 	}
 	resp, err := c.client.Get(

@@ -154,32 +154,20 @@ func (s *Server) HandleBase64(w http.ResponseWriter, r *http.Request) {
 
 // HandleMe32 replies back with the base32 of the client requesting it
 func (s *Server) HandleMe32(w http.ResponseWriter, r *http.Request) {
-	if s.listing {
-		fmt.Fprintln(w, r.Header.Get("X-I2p-Destb32"))
-		return
-	}
-	fmt.Fprintln(w, "Listings disabled for this server")
+	fmt.Fprintln(w, r.Header.Get("X-I2p-Destb32"))
 	return
 }
 
 // HandleMe64 replies back with the base64 of the client requesting it
 func (s *Server) HandleMe64(w http.ResponseWriter, r *http.Request) {
-	if s.listing {
-		fmt.Fprintln(w, r.Header.Get("X-I2p-Destb64"))
-		return
-	}
-	fmt.Fprintln(w, "Listings disabled for this server")
+	fmt.Fprintln(w, r.Header.Get("X-I2p-Destb64"))
 	return
 }
 
 // HandleMeBoth replies back with both the base32 and base64 of the client requesting it
 func (s *Server) HandleMeBoth(w http.ResponseWriter, r *http.Request) {
-	if s.listing {
-        fmt.Fprintln(w, r.Header.Get("X-I2p-Destb32"))
-		fmt.Fprintln(w, r.Header.Get("X-I2p-Destb64"))
-		return
-	}
-	fmt.Fprintln(w, "Listings disabled for this server")
+	fmt.Fprintln(w, r.Header.Get("X-I2p-Destb32"))
+	fmt.Fprintln(w, r.Header.Get("X-I2p-Destb64"))
 	return
 }
 
@@ -274,9 +262,9 @@ func (s *Server) NewMux() (*http.ServeMux, error) {
 	s.localService.HandleFunc("/sub/", s.HandleListing)
 	s.localService.HandleFunc("/addr/", s.HandleBase32)
 	s.localService.HandleFunc("/addr64/", s.HandleBase64)
-    s.localService.HandleFunc("/me32/", s.HandleMe32)
-    s.localService.HandleFunc("/me64/", s.HandleMe64)
-    s.localService.HandleFunc("/me/", s.HandleMeBoth)
+	s.localService.HandleFunc("/me32/", s.HandleMe32)
+	s.localService.HandleFunc("/me64/", s.HandleMe64)
+	s.localService.HandleFunc("/me/", s.HandleMeBoth)
 	s.localService.HandleFunc("/push/", s.HandlePush)
 	s.localService.HandleFunc("/recv/", s.HandleRecv)
 	s.localService.HandleFunc("/acct/", s.HandleAccount)
@@ -353,12 +341,12 @@ func NewServerFromOptions(opts ...func(*Server) error) (*Server, error) {
 		if s.err != nil {
 			return nil, s.err
 		}
-		s.transport = &http.Transport {
-            Dial: s.pusher.Dial,
-        }
-		s.client = &http.Client {
-            Transport: s.transport,
-        }
+		s.transport = &http.Transport{
+			Dial: s.pusher.Dial,
+		}
+		s.client = &http.Client{
+			Transport: s.transport,
+		}
 	}
 	s.jumpHelper, s.err = NewJumpHelperFromOptions(
 		SetJumpHelperAddressBookPath(s.addressBookPath),
