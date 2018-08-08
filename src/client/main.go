@@ -35,7 +35,7 @@ func main() {
 				log.Fatal(e)
 			}
 		}
-		log.Fatal("Error invalid domain")
+		log.Fatal("Error invalid domain", *domain)
 	}
 
 	if *url != "false" {
