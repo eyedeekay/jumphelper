@@ -149,9 +149,10 @@ func (s *Server) HandleBase64(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) HandleReflectHeaders(w http.ResponseWriter, r *http.Request) {
-    for k, h := range r.Header {
-        fmt.Fprintln(w, k, h, r.Header)
-    }
+    for key, value := range r.Header {
+		log.Println(key, value)
+		fmt.Fprintf(w, "Header: %s, Value: %s\n", key, value)
+	}
 	return
 }
 
