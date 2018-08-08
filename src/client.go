@@ -102,18 +102,25 @@ func (c *Client) Signup(domain, base64 string) (string, error) {
 		if err != nil {
 			return "", err
 		}
-		proof, err := pow.Fulfil(string(bytes), []byte(domain))
-		resp2, err := c.client.Get(
-			c.address(string(bytes)+","+proof+","+domain+","+base64, "acct"),
-		)
-		defer resp2.Body.Close()
-		bytes2, err := ioutil.ReadAll(resp2.Body)
-		if err != nil {
-			return "", err
-		}
-		return string(bytes2), nil
+        return string(bytes), nil
 	}
 	return "", fmt.Errorf("Account exists, use update instead")
+}
+
+func (c *Client) Register(bytes, domain string)(string, error) {
+    proof, err := pow.Fulfil(string(bytes), []byte(domain))
+    if err != nil {
+		return "", err
+	}
+	resp, err := c.client.Get(
+		c.address(string(bytes)+","+proof+","+domain+","+base64, "acct"),
+	)
+	defer resp2.Body.Close()
+	bytes, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return "", err
+	}
+	return string(bytes2), nil
 }
 
 // NewClient creates a new jumphelper client

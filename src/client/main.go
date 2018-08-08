@@ -29,8 +29,8 @@ func main() {
 	}
 	if *signup {
 		if *domain != ".i2p" {
-			if s, e := c.Signup(*domain, *base64); e != nil {
-				fmt.Println(s)
+			if s, e := c.Signup(*domain, *base64); e == nil {
+				fmt.Println("Signup i:", s)
 			} else {
 				log.Fatal(e)
 			}
