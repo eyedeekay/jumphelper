@@ -32,7 +32,7 @@ func main() {
 			if s, e := c.Signup(*domain, *base64); e == nil {
 				fmt.Println("Signup:", s)
                 if s, e := c.Register(s, *domain, *base64); e == nil {
-                    fmt.Println("Signup:", s)
+                    fmt.Println("Registration:", s)
                 } else {
                     log.Fatal(e)
                 }
