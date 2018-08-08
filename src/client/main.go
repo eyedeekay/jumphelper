@@ -28,14 +28,15 @@ func main() {
 		log.Fatal(err, "Error starting client")
 	}
 	if *signup {
-		if *domain == ".i2p" {
+		if *domain != ".i2p" {
 			if s, e := c.Signup(*domain, *base64); e != nil {
 				fmt.Println(s)
 			} else {
 				log.Fatal(e)
 			}
-		}
-		log.Fatal("Error invalid domain", *domain)
+		}else{
+            log.Fatal("Error invalid domain", *domain)
+        }
 	}
 
 	if *url != "false" {
