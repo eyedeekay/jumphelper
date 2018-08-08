@@ -3,7 +3,7 @@ RUN apk update && apk add go go-tools make musl-dev musl musl-utils git
 RUN adduser -g i2pd -D i2pd
 RUN git clone https://github.com/eyedeekay/jumphelper /opt/work
 WORKDIR /opt/work
-RUN make deps server install
+RUN make deps server install-server
 COPY misc/addresses.csv /var/lib/i2pd/addressbook/addresses.csv
 RUN chown -R i2pd:i2pd /var/lib/i2pd/addressbook/addresses.csv /opt/work
 USER i2pd
