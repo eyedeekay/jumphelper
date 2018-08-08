@@ -4,8 +4,6 @@ RUN adduser -g i2pd -D i2pd
 #RUN git clone https://github.com/eyedeekay/jumphelper /opt/work
 COPY . /opt/work
 WORKDIR /opt/work
-RUN go get -u github.com/eyedeekay/jumphelper/src
-RUN go get -u golang.org/x/time/rate
 RUN make deps server
 COPY misc/addresses.csv /var/lib/i2pd/addressbook/addresses.csv
 RUN chown -R i2pd:i2pd /var/lib/i2pd/addressbook/addresses.csv /opt/work
