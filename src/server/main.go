@@ -39,6 +39,7 @@ func main() {
 	forward := flag.Bool("i2p", false, "Forward service to an i2p destination over a SAM connection")
 	tunname := flag.String("tunname", "jumphelper", "Tunnel name for SAM forwarding.")
 	difficulty := flag.Int("difficulty", 1, "proof of work difficulty to hand out(will be double for account creation)")
+	//leech := flag.Bool("", true, "Accept pushes from other jumphelpers?"
 	verbose := flag.Bool("verbose", false, "Verbose?")
 
 	flag.Var(&subscriptions, "subs", "Subscription URL(Can be specified multiple times)")

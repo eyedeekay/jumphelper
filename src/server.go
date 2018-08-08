@@ -166,8 +166,7 @@ func (s *Server) HandleMe64(w http.ResponseWriter, r *http.Request) {
 
 // HandleMeBoth replies back with both the base32 and base64 of the client requesting it
 func (s *Server) HandleMeBoth(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, r.Header.Get("X-I2p-Destb32"))
-	fmt.Fprintln(w, r.Header.Get("X-I2p-Destb64"))
+	fmt.Fprintln(w, r.Header.Get("X-I2p-Destb32"), ",", r.Header.Get("X-I2p-Destb64"))
 	return
 }
 
@@ -256,22 +255,25 @@ func (s *Server) HandleAccount(w http.ResponseWriter, r *http.Request) {
 // NewMux sets up a new ServeMux with handlers
 func (s *Server) NewMux() (*http.ServeMux, error) {
 	s.localService = http.NewServeMux()
+	s.localService.HandleFunc("/acct/", s.HandleAccount)
 	s.localService.HandleFunc("/check/", s.HandleExists)
-	s.localService.HandleFunc("/request/", s.HandleLookup)
 	s.localService.HandleFunc("/jump/", s.HandleJump)
-	s.localService.HandleFunc("/sub/", s.HandleListing)
-	s.localService.HandleFunc("/addr/", s.HandleBase32)
-	s.localService.HandleFunc("/addr64/", s.HandleBase64)
-	s.localService.HandleFunc("/me32/", s.HandleMe32)
-	s.localService.HandleFunc("/me64/", s.HandleMe64)
-	s.localService.HandleFunc("/me/", s.HandleMeBoth)
 	s.localService.HandleFunc("/push/", s.HandlePush)
 	s.localService.HandleFunc("/recv/", s.HandleRecv)
-	s.localService.HandleFunc("/acct/", s.HandleAccount)
+	s.localService.HandleFunc("/request/", s.HandleLookup)
+
+	s.localService.HandleFunc("/addr", s.HandleBase32)
+	s.localService.HandleFunc("/addr64", s.HandleBase64)
+	s.localService.HandleFunc("/me32", s.HandleMe32)
+	s.localService.HandleFunc("/me64", s.HandleMe64)
+	s.localService.HandleFunc("/me", s.HandleMeBoth)
 	s.localService.HandleFunc("/pow", s.HandleProof)
+	s.localService.HandleFunc("/sub", s.HandleListing)
+
 	s.localService.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintln(w, "Dave's not here man.")
 	})
+
 	if s.err != nil {
 		return nil, fmt.Errorf("Local mux configuration error: %s", s.err)
 	}
