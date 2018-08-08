@@ -270,9 +270,9 @@ func (s *Server) NewMux() (*http.ServeMux, error) {
 	s.localService.HandleFunc("/pow", s.HandleProof)
 	s.localService.HandleFunc("/sub", s.HandleListing)
 
-	s.localService.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	/*s.localService.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintln(w, "Dave's not here man.")
-	})
+	})*/
 
 	if s.err != nil {
 		return nil, fmt.Errorf("Local mux configuration error: %s", s.err)
