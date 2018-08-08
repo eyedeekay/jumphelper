@@ -35,7 +35,7 @@ docker-run: docker-network docker-clean
 		--ip 172.80.80.13 \
 		-p 127.0.0.1:7855:7855 \
 		--volume forwarded-jumphelper:/opt/work \
-		-t eyedeekay/jumphelper; true
+		-t eyedeekay/jumphelper
 
 docker-clean:
 	docker rm -f jumphelper; true
